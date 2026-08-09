@@ -7,10 +7,10 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <HelmetProvider>
-      <ThemeProvider defaultTheme="system" storageKey="architecture-theme">
+    <ThemeProvider defaultTheme="system" storageKey="architecture-theme">
+      <HelmetProvider>
         <App />
-      </ThemeProvider>
-    </HelmetProvider>
+      </HelmetProvider>
+    </ThemeProvider>
   </StrictMode>
 );
