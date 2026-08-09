@@ -1,6 +1,7 @@
 import heroImage from "@/assets/khatir-hero.jpg";
 import { waLink } from "@/lib/company";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -41,13 +42,13 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-delayed">
-          <a
-            href="/work"
+          <Link
+            to="/work"
             className="group inline-flex items-center justify-center gap-2 bg-gradient-gold text-gold-foreground px-8 py-3.5 rounded-full font-medium tracking-wide hover:shadow-gold transition-all duration-500 hover:-translate-y-0.5"
           >
             View Properties
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </a>
+          </Link>
           <a
             href={waLink()}
             target="_blank"

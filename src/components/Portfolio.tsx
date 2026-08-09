@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PropertyCard from "@/components/PropertyCard";
 import { properties } from "@/data/properties";
 
@@ -14,12 +15,12 @@ const Portfolio = () => {
                 Featured Properties
               </h3>
             </div>
-            <a
-              href="/work"
+            <Link
+              to="/work"
               className="text-minimal text-primary hover:text-gold transition-colors"
             >
               VIEW ALL PROPERTIES →
-            </a>
+            </Link>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

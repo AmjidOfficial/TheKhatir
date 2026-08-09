@@ -1,4 +1,5 @@
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/khatir-logo.png";
 import { COMPANY, waLink } from "@/lib/company";
 import SocialLinks from "@/components/SocialLinks";
@@ -12,9 +13,9 @@ const Footer = () => {
         <div className="grid gap-12 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-2">
-            <a href="/" className="inline-flex items-center bg-white rounded-xl p-3 mb-5 shadow-gold" aria-label={COMPANY.name}>
+            <Link to="/" className="inline-flex items-center bg-white rounded-xl p-3 mb-5 shadow-gold" aria-label={COMPANY.name}>
               <img src={logo} alt={COMPANY.name} className="h-20 w-auto object-contain" />
-            </a>
+            </Link>
             <p className="text-sm text-luxe-foreground/90 leading-relaxed max-w-md">
               {COMPANY.services}. Trusted property and construction partners serving Peshawar and beyond.
             </p>
@@ -46,12 +47,12 @@ const Footer = () => {
           <div>
             <h4 className="text-xs uppercase tracking-[0.2em] text-gold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-luxe-foreground/95">
-              <li><a href="/" className="hover:text-gold transition-colors">Home</a></li>
-              <li><a href="/work" className="hover:text-gold transition-colors">Properties</a></li>
-              <li><a href="/services" className="hover:text-gold transition-colors">Services</a></li>
-              <li><a href="/about" className="hover:text-gold transition-colors">About</a></li>
-              <li><a href="/blog" className="hover:text-gold transition-colors">Blog</a></li>
-              <li><a href="/contact" className="hover:text-gold transition-colors">Contact</a></li>
+              <li><Link to="/" className="hover:text-gold transition-colors">Home</Link></li>
+              <li><Link to="/work" className="hover:text-gold transition-colors">Properties</Link></li>
+              <li><Link to="/services" className="hover:text-gold transition-colors">Services</Link></li>
+              <li><Link to="/about" className="hover:text-gold transition-colors">About</Link></li>
+              <li><Link to="/blog" className="hover:text-gold transition-colors">Blog</Link></li>
+              <li><Link to="/contact" className="hover:text-gold transition-colors">Contact</Link></li>
               <li>
                 <a href={waLink()} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
                   WhatsApp Us
