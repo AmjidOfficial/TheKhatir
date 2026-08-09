@@ -20,6 +20,9 @@
     --primary: 150 60% 18%;
     --primary-foreground: 40 33% 98%;
 
+    /* Always-light text for dark emerald/luxe surfaces (both themes) */
+    --luxe-foreground: 40 33% 98%;
+
     /* Secondary: Soft cream */
     --secondary: 40 30% 94%;
     --secondary-foreground: 150 60% 18%;
