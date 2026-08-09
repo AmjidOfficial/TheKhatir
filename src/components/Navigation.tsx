@@ -23,7 +23,7 @@ const Navigation = () => {
           <img
             src={logo}
             alt={COMPANY.name}
-            className="h-14 md:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            className="h-14 md:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105 dark:bg-background/0 dark:brightness-125 dark:contrast-125"
           />
         </a>
 

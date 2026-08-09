@@ -58,7 +58,7 @@ const Services = () => {
                     {s.number}
                   </span>
                   <div className="flex items-start gap-6 relative">
-                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-emerald text-primary-foreground group-hover:bg-gradient-gold transition-all duration-500 shadow-elegant">
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-emerald text-luxe-foreground group-hover:bg-gradient-gold transition-all duration-500 shadow-elegant">
                       <Icon className="h-7 w-7" />
                     </div>
                     <div>
