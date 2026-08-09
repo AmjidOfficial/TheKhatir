@@ -44,10 +44,10 @@ const Contact = () => {
             </div>
 
             <div className="space-y-8">
-              <div className="rounded-lg bg-gradient-emerald p-10 text-primary-foreground shadow-architectural">
+              <div className="rounded-lg bg-gradient-emerald p-10 text-luxe-foreground shadow-architectural">
                 <MessageCircle className="h-10 w-10 text-gold mb-4" />
                 <h4 className="text-2xl font-light mb-3">Talk to us instantly</h4>
-                <p className="text-primary-foreground/80 mb-6 leading-relaxed">
+                <p className="text-luxe-foreground/80 mb-6 leading-relaxed">
                   Have a question about a property, plot, or construction project?
                   Send us a message on WhatsApp — we usually reply within minutes.
                 </p>
