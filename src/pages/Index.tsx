@@ -7,6 +7,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SEO from "@/components/SEO";
+import SponsoredPlacements from "@/components/SponsoredPlacements";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       />
       <Navigation />
       <Hero />
+      <SponsoredPlacements placementTypes={["homepage_placement", "promoted_business"]} title="Featured partners" />
       <Services />
       <About />
       <Portfolio />
