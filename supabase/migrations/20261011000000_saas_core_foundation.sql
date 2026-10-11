@@ -501,6 +501,86 @@ create table if not exists public.audit_logs (
   created_at timestamptz not null default now()
 );
 
+create unique index if not exists idx_content_global_slug on public.content_pages(slug) where tenant_id is null;
+
+alter table public.leads
+  add constraint leads_campaign_id_fkey
+  foreign key (campaign_id) references public.ad_campaigns(id) on delete set null;
+
+create or replace function public.validate_tenant_relationships()
+returns trigger
+language plpgsql
+set search_path = public
+as $
+begin
+  if tg_table_name = 'leads' then
+    if new.property_id is not null and not exists (
+      select 1 from public.properties p where p.id = new.property_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Lead property must belong to the same tenant'; end if;
+    if new.project_id is not null and not exists (
+      select 1 from public.projects p where p.id = new.project_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Lead project must belong to the same tenant'; end if;
+  elsif tg_table_name = 'tasks' then
+    if new.lead_id is not null and not exists (
+      select 1 from public.leads l where l.id = new.lead_id and l.tenant_id = new.tenant_id
+    ) then raise exception 'Task lead must belong to the same tenant'; end if;
+    if new.property_id is not null and not exists (
+      select 1 from public.properties p where p.id = new.property_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Task property must belong to the same tenant'; end if;
+    if new.project_id is not null and not exists (
+      select 1 from public.projects p where p.id = new.project_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Task project must belong to the same tenant'; end if;
+  elsif tg_table_name = 'lead_activities' then
+    if not exists (
+      select 1 from public.leads l where l.id = new.lead_id and l.tenant_id = new.tenant_id
+    ) then raise exception 'Activity lead must belong to the same tenant'; end if;
+  elsif tg_table_name = 'event_registrations' then
+    if not exists (
+      select 1 from public.events e where e.id = new.event_id and e.tenant_id = new.tenant_id
+    ) then raise exception 'Registration event must belong to the same tenant'; end if;
+    if tg_op = 'INSERT' and new.status <> 'registered' then
+      raise exception 'New registrations must start in registered status';
+    end if;
+    if tg_op = 'UPDATE' and new.user_id = auth.uid()
+       and not public.can_manage_tenant(new.tenant_id)
+       and new.status <> 'cancelled' then
+      raise exception 'Customers may only cancel their own event registration';
+    end if;
+    if tg_op = 'UPDATE' and new.user_id = auth.uid()
+       and (new.event_id is distinct from old.event_id or new.user_id is distinct from old.user_id) then
+      raise exception 'Event registration identity cannot be changed';
+    end if;
+  elsif tg_table_name = 'ad_campaigns' then
+    if new.property_id is not null and not exists (
+      select 1 from public.properties p where p.id = new.property_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Campaign property must belong to the same tenant'; end if;
+    if new.project_id is not null and not exists (
+      select 1 from public.projects p where p.id = new.project_id and p.tenant_id = new.tenant_id
+    ) then raise exception 'Campaign project must belong to the same tenant'; end if;
+    if new.event_id is not null and not exists (
+      select 1 from public.events e where e.id = new.event_id and e.tenant_id = new.tenant_id
+    ) then raise exception 'Campaign event must belong to the same tenant'; end if;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists validate_lead_tenant_relations on public.leads;
+create trigger validate_lead_tenant_relations before insert or update on public.leads
+for each row execute procedure public.validate_tenant_relationships();
+drop trigger if exists validate_task_tenant_relations on public.tasks;
+create trigger validate_task_tenant_relations before insert or update on public.tasks
+for each row execute procedure public.validate_tenant_relationships();
+drop trigger if exists validate_activity_tenant_relations on public.lead_activities;
+create trigger validate_activity_tenant_relations before insert or update on public.lead_activities
+for each row execute procedure public.validate_tenant_relationships();
+drop trigger if exists validate_registration_tenant_relations on public.event_registrations;
+create trigger validate_registration_tenant_relations before insert or update on public.event_registrations
+for each row execute procedure public.validate_tenant_relationships();
+drop trigger if exists validate_campaign_tenant_relations on public.ad_campaigns;
+create trigger validate_campaign_tenant_relations before insert or update on public.ad_campaigns
+for each row execute procedure public.validate_tenant_relationships();
+
 create index if not exists idx_memberships_user_status on public.tenant_memberships(user_id, status);
 create index if not exists idx_properties_public_search on public.properties(publication_status, city, listing_type, intent, price);
 create index if not exists idx_properties_tenant_updated on public.properties(tenant_id, updated_at desc);
@@ -792,6 +872,7 @@ create policy "properties_read_published_or_tenant" on public.properties
 for select
 using (
   (publication_status = 'published' and verification_status = 'verified'
+    and (expires_at is null or expires_at > now())
     and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
   or public.is_tenant_member(tenant_id)
   or public.is_platform_admin()
@@ -1041,7 +1122,64 @@ for select to authenticated
 using (public.is_platform_admin() or (tenant_id is not null and public.can_manage_tenant(tenant_id)));
 
 grant usage on schema public to anon, authenticated;
-grant select on public.tenants, public.properties, public.projects, public.events, public.ad_campaigns, public.content_pages to anon, authenticated;
+grant select on public.tenants, public.properties, public.projects, public.events, public.ad_campaigns, public.content_pages to authenticated;
+
+-- Public clients use allow-listed views, not base tables with internal workflow fields.
+create or replace view public.marketplace_businesses with (security_barrier = true) as
+select id, name, slug, business_type, logo_url, website_url, contact_email, contact_phone, country_code, city
+from public.tenants
+where status = 'active' and is_public = true;
+
+create or replace view public.marketplace_properties with (security_barrier = true) as
+select p.id, p.reference_code, p.title, p.slug, p.description, p.listing_type, p.intent,
+       p.price, p.currency, p.price_period, p.area_value, p.area_unit, p.bedrooms, p.bathrooms,
+       p.province, p.city, p.locality, p.society, p.block_sector, p.amenities, p.media,
+       p.verified_at, p.availability_confirmed_at, p.published_at, p.updated_at
+from public.properties p
+join public.tenants t on t.id = p.tenant_id
+where p.publication_status = 'published'
+  and p.verification_status = 'verified'
+  and (p.expires_at is null or p.expires_at > now())
+  and t.status = 'active';
+
+create or replace view public.marketplace_projects with (security_barrier = true) as
+select p.id, p.title, p.slug, p.project_type, p.summary, p.description,
+       p.province, p.city, p.locality, p.amenities, p.media, p.brochure_url,
+       p.payment_plan_url, p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
+from public.projects p
+join public.tenants t on t.id = p.tenant_id
+where p.publication_status = 'published' and p.approval_status = 'verified' and t.status = 'active';
+
+create or replace view public.marketplace_events with (security_barrier = true) as
+select e.id, e.title, e.slug, e.event_type, e.description, e.starts_at, e.ends_at,
+       e.timezone, e.venue, e.online_url, e.cover_image_url, e.capacity
+from public.events e
+join public.tenants t on t.id = e.tenant_id
+where e.publication_status = 'published' and t.status = 'active';
+
+create or replace view public.marketplace_content with (security_barrier = true) as
+select c.id, c.title, c.slug, c.content_type, c.excerpt, c.body, c.meta_title,
+       c.meta_description, c.canonical_url, c.social_image_url, c.robots_directive, c.published_at
+from public.content_pages c
+where c.publication_status = 'published'
+  and (c.tenant_id is null or exists (
+    select 1 from public.tenants t where t.id = c.tenant_id and t.status = 'active'
+  ));
+
+create or replace view public.marketplace_ad_placements with (security_barrier = true) as
+select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
+       c.destination_url, c.creative, c.target_locations, c.starts_at, c.ends_at
+from public.ad_campaigns c
+join public.tenants t on t.id = c.tenant_id
+where c.status = 'active' and c.moderation_status = 'approved'
+  and c.starts_at <= now() and (c.ends_at is null or c.ends_at > now())
+  and t.status = 'active';
+
+revoke all on public.tenants, public.properties, public.projects, public.events,
+  public.ad_campaigns, public.content_pages from anon;
+grant select on public.marketplace_businesses, public.marketplace_properties,
+  public.marketplace_projects, public.marketplace_events, public.marketplace_content,
+  public.marketplace_ad_placements to anon, authenticated;
 grant select, update on public.user_profiles to authenticated;
 grant select, insert, update, delete on public.tenant_memberships to authenticated;
 grant insert, update, delete on public.tenants to authenticated;
