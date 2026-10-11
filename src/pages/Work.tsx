@@ -9,6 +9,7 @@ import SEO from "@/components/SEO";
 import { properties as sampleProperties, type Property } from "@/data/properties";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
 import { mapMarketplaceProperty, type MarketplaceProperty } from "@/lib/property-mapper";
+import SponsoredPlacements from "@/components/SponsoredPlacements";
 
 const categories = ["ALL", "HOUSE", "PLOT", "COMMERCIAL", "APARTMENT"] as const;
 const statuses = ["ANY", "FOR SALE", "FOR RENT"] as const;
@@ -168,6 +169,8 @@ const Work = () => {
           </div>
         </div>
       </section>
+
+      <SponsoredPlacements placementTypes={["featured_property", "sponsored_search", "area_placement"]} title="Sponsored property opportunities" />
 
       <section className="pb-28 md:pb-32">
         <div className="container mx-auto px-6">
