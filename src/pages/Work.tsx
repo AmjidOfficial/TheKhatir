@@ -1,11 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { Search, RotateCcw } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import PropertyCard from "@/components/PropertyCard";
 import SEO from "@/components/SEO";
-import { properties } from "@/data/properties";
+import { properties as sampleProperties, type Property } from "@/data/properties";
+import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
+import { mapMarketplaceProperty, type MarketplaceProperty } from "@/lib/property-mapper";
 
 const categories = ["ALL", "HOUSE", "PLOT", "COMMERCIAL", "APARTMENT"] as const;
 const statuses = ["ANY", "FOR SALE", "FOR RENT"] as const;
@@ -14,10 +17,38 @@ const Work = () => {
   const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>("ALL");
   const [activeStatus, setActiveStatus] = useState<(typeof statuses)[number]>("ANY");
   const [searchQuery, setSearchQuery] = useState("");
+  const [listingProperties, setListingProperties] = useState<Property[]>(isSupabaseConfigured ? [] : sampleProperties);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
+  const [loadError, setLoadError] = useState("");
+  const usingSamples = !isSupabaseConfigured;
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    let cancelled = false;
+    const loadListings = async () => {
+      try {
+        const client = getSupabaseClient() as unknown as SupabaseClient;
+        const { data, error } = await client.from("marketplace_properties").select(
+          "id,reference_code,title,description,listing_type,intent,price,currency,price_period,area_value,area_unit,bedrooms,bathrooms,province,city,locality,society,block_sector"
+        );
+        if (error) throw error;
+        if (!cancelled) setListingProperties(((data ?? []) as unknown as MarketplaceProperty[]).map(mapMarketplaceProperty));
+      } catch {
+        if (!cancelled) {
+          setListingProperties([]);
+          setLoadError("Live property listings could not be loaded. Please try again later or contact Khatir.");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    void loadListings();
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered = useMemo(() => {
     const query = searchQuery.trim().toLocaleLowerCase();
-    return properties.filter((property) => {
+    return listingProperties.filter((property) => {
       const categoryMatches = activeCategory === "ALL" || property.category === activeCategory;
       const statusMatches = activeStatus === "ANY" || property.status === activeStatus;
       const searchableText = [
@@ -30,7 +61,7 @@ const Work = () => {
       const queryMatches = !query || searchableText.includes(query);
       return categoryMatches && statusMatches && queryMatches;
     });
-  }, [activeCategory, activeStatus, searchQuery]);
+  }, [activeCategory, activeStatus, searchQuery, listingProperties]);
 
   const resetFilters = () => {
     setActiveCategory("ALL");
@@ -142,11 +173,14 @@ const Work = () => {
           <div className="max-w-7xl mx-auto">
             <div className="mb-6 flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground" aria-live="polite">
-                <span className="font-semibold text-primary">{filtered.length}</span>{" "}
-                {filtered.length === 1 ? "property" : "properties"} found
+                {loading ? "Loading current listings…" : <><span className="font-semibold text-primary">{filtered.length}</span>{" "}{filtered.length === 1 ? "property" : "properties"} found</>}
               </p>
             </div>
-            {filtered.length === 0 ? (
+            {loadError && <div role="alert" className="mb-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">{loadError}</div>}
+            {usingSamples && <div role="status" className="mb-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">This preview uses illustrative SAMPLE ONLY listings because live inventory is not connected. Prices and availability are not confirmed offers.</div>}
+            {loading ? (
+              <div className="rounded-2xl border border-border bg-card px-6 py-16 text-center text-muted-foreground">Loading verified property listings…</div>
+            ) : filtered.length === 0 ? (
               <div className="rounded-2xl border border-border bg-card px-6 py-16 text-center">
                 <h2 className="text-2xl font-medium text-primary">No matching properties yet</h2>
                 <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
