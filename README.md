@@ -1,52 +1,103 @@
-# Khatir Real Estate & Builders
+# Khatir Property & Development Platform
 
-The production codebase for the Khatir property and development platform.
+Khatir is being built as a Peshawar-first real estate and property-development SaaS platform. The long-term product brings property search, developer projects, construction workflows, lead management, events, advertising, SEO publishing and business operations into one secure workspace.
 
-**Primary website:** https://khatir.netlify.app  
-**Primary repository:** https://github.com/AmjidOfficial/TheKhatir  
-**Business focus:** Peshawar, Khyber Pakhtunkhwa, Pakistan
+**Production status: in development.** The public website is a foundation. SaaS authentication and workspace screens are being implemented, and the database migration is still under review. Do not treat this repository as production-ready until the release gates below pass.
 
-## Product vision
+## Product areas
 
-Build a trusted, mobile-first property platform for buying, selling, renting, property consultancy, construction, and development projects. The experience should combine the ease of a property search portal with the local knowledge and personal service of Khatir.
+### Public marketplace
+- Property discovery for sale and rent
+- Developer and construction project profiles
+- Area guides, editorial content and SEO landing pages
+- Events and site visits
+- Verified business profiles and clearly labelled sponsored placements
 
-## Current technology
+### Business workspace
+- Individual account and business workspace onboarding
+- Property listing drafts, editing, review submission and archive
+- Lead CRM with pipeline stages and activity notes
+- Project, event, advertising and SEO content workspaces
+- Role-aware navigation and tenant-scoped data access
 
-- React 18, TypeScript, and Vite
+### SaaS administration (planned / gated)
+- Platform super-admin and business moderation
+- Team invitations, role management and branch permissions
+- Media/document storage, notifications and audit review
+- Subscription plans, usage limits, invoices and payment integrations
+- Investor reporting, construction milestones, project inventory and customer portals
+
+The product blueprint defines the broader requirements: [SaaS product blueprint](docs/SAAS_PRODUCT_BLUEPRINT.md).
+
+## Technology
+
+- React, TypeScript and Vite
 - Tailwind CSS and shadcn/ui
 - React Router
-- Supabase client package is present; production database integration and policies still require verification
-- Netlify deployment with SPA redirects
+- Supabase Auth and PostgreSQL with Row Level Security
+- Netlify deployment previews
 
-## Run locally
+## Local development
 
-Requirements: a supported Node.js LTS release and npm.
+Requirements: Node.js 22+ and npm.
 
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
-Set the public Supabase project URL and publishable/anon key in `.env.local` only if the relevant Supabase project is configured. Never put a Supabase service-role key or other server secret in a `VITE_*` variable.
+Before enabling authentication, create or select the **dedicated Khatir Supabase project** and configure the following environment variables in a local `.env` file and the Netlify site settings:
 
-## Available scripts
+```bash
+VITE_SUPABASE_URL=https://YOUR-KHATIR-PROJECT.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
+```
 
-- `npm run dev` — local development
-- `npm run build` — production build
-- `npm run lint` — lint checks
-- `npm run preview` — preview the built app
+Use only the publishable/anon key in browser code. **Never put a Supabase service-role key, database password, payment secret, or private API key in a `VITE_*` variable or commit it to Git.**
 
-## Production principles
+If the variables are missing, the login and workspace screens show a setup message instead of creating fake users or metrics.
 
-1. Do not publish invented properties, prices, client counts, returns, approvals, or availability as facts.
-2. Clearly label demo/sample content and replace it with approved, current inventory before launch.
-3. Confirm ownership, authority approvals, listing status, price, and last-updated date with the responsible team.
-4. Treat enquiries and customer data as private. Enforce access in the database, not only in the UI.
-5. Keep credentials out of Git. Use environment variables and platform secret settings.
-6. Test mobile layouts, keyboard navigation, forms, page refresh/deep links, and error states before release.
-7. Keep this repository as the single source of truth. Review changes in branches/PRs and verify the production build before deploying.
+## Database and security
 
-## Project plan
+The proposed schema is in [the SaaS database foundation migration](supabase/migrations/20261011000000_saas_core_foundation.sql). Read [the rollout and security checklist](docs/SAAS_DATABASE_FOUNDATION.md) before applying it.
 
-See [docs/PROJECT_AUDIT_AND_ROADMAP.md](docs/PROJECT_AUDIT_AND_ROADMAP.md) for the audit findings and launch blockers. See [docs/SAAS_PRODUCT_BLUEPRINT.md](docs/SAAS_PRODUCT_BLUEPRINT.md) for the target multi-tenant SaaS scope, roles, CRM, advertising, events, developer/builders workspace, security requirements, and release gates.
+Important:
+1. Confirm the correct Khatir Supabase project first. Do not apply this migration to the unrelated N-LINK360 project.
+2. Apply to a dedicated staging database before production.
+3. Test row-level security with at least two businesses and multiple roles.
+4. Bootstrap the first platform administrator through a trusted, audited process. Never let users assign themselves platform roles.
+5. Configure Storage buckets and object-level policies before uploading property photos or private documents.
+6. Public lead submissions and event registrations must use validated server-side/Edge Function endpoints with rate limits and spam protection.
+7. Generate TypeScript database types from the actually applied schema.
+8. Do not enable paid ads or subscriptions until plans, quotas, payment webhooks, refunds and reconciliation are tested.
+
+The marketplace views are intended to expose only approved public fields. Keep base tables private and review every change to public views.
+
+## Quality checks
+
+Run before opening a pull request:
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run build
+```
+
+The repository CI workflow runs typecheck, lint and production build on Node.js 22.
+
+## Release gates
+
+- [ ] Dedicated Khatir Supabase project confirmed and environment variables set
+- [ ] Database migration reviewed, applied to staging and validated
+- [ ] Tenant isolation and role permissions pass automated tests
+- [ ] Auth, password reset, workspace creation and property CRUD tested end-to-end
+- [ ] Lead CRM, event, project, ad and SEO workflows tested with real database records
+- [ ] Storage, public enquiry endpoints, rate limits and privacy controls implemented
+- [ ] Platform admin bootstrap, moderation queue and audit review tested
+- [ ] Mobile accessibility, performance, backups, monitoring and restore procedures checked
+- [ ] Legal, privacy, property verification and sponsored-content policies reviewed
+- [ ] Production deployment and rollback plan approved
+
+## Repository strategy
+
+This repository, `AmjidOfficial/TheKhatir`, is the intended final repository. Consolidate valuable content from `AmjidOfficial/Khatir` here only after comparing the actual files and verifying that assets, SEO information, configuration and history are preserved. Keep the old repository available until the final deployment, rollback and backup checks are complete.
