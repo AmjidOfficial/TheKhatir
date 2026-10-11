@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 type FieldType = "text" | "url" | "number" | "textarea" | "select" | "datetime-local";
 type FieldDef = { key: string; label: string; type: FieldType; required?: boolean; maxLength?: number; min?: number; options?: { value: string; label: string }[]; placeholder?: string };
@@ -297,12 +298,13 @@ const BusinessOpsAdmin = () => {
   };
 
   const sortedRows = useMemo(() => rows, [rows]);
-  if (loading) return <main className="flex min-h-screen items-center justify-center gap-3 bg-background text-muted-foreground"><LoaderCircle className="h-5 w-5 animate-spin" /> Loading workspace module…</main>;
+  if (loading) return <main className="flex min-h-screen items-center justify-center gap-3 bg-background text-muted-foreground"><SEO title="Business operations | Khatir Workspace" description="Private business operations workspace." path={"/dashboard/" + (module ?? "")} robots="noindex,nofollow" /><LoaderCircle className="h-5 w-5 animate-spin" /> Loading workspace module…</main>;
   if (!config) return <main className="p-10"><h1 className="text-2xl">Module not found</h1><Link to="/dashboard">Return to workspace</Link></main>;
   const Icon = config.icon;
 
   return (
     <main className="min-h-screen bg-muted/30">
+      <SEO title={config.title + " | Khatir Workspace"} description="Private business operations workspace." path={"/dashboard/" + (module ?? "")} robots="noindex,nofollow" />
       <header className="border-b border-border bg-background"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8"><Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" /> Workspace dashboard</Link><Button variant="outline" size="sm" onClick={() => void load()}><RefreshCw className="h-4 w-4" /> Refresh</Button></div></header>
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
