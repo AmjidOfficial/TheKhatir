@@ -170,7 +170,7 @@ const Work = () => {
         </div>
       </section>
 
-      <SponsoredPlacements placementTypes={["featured_property", "sponsored_search", "area_placement"]} title="Sponsored property opportunities" />
+      <SponsoredPlacements placementTypes={["featured_property", "sponsored_search", "area_placement"]} title="Sponsored property opportunities" currentLocation={searchQuery || "Peshawar"} />
 
       <section className="pb-28 md:pb-32">
         <div className="container mx-auto px-6">
