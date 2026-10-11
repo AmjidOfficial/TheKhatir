@@ -135,6 +135,20 @@ const PlatformAdmin = () => {
         payload = { publication_status: action === "approve" ? "published" : "archived" };
         if (action === "approve" && !canPublishForTenant(row)) throw new Error("Activate and publish the business workspace before publishing this event.");
       } else if (tab === "ads") {
+        if (action === "approve") {
+          const startsAt = row.starts_at ? new Date(String(row.starts_at)) : null;
+          const endsAt = row.ends_at ? new Date(String(row.ends_at)) : null;
+          const creative = (row.creative && typeof row.creative === "object" ? row.creative : {}) as Record<string, unknown>;
+          if (!startsAt || Number.isNaN(startsAt.getTime()) || !endsAt || Number.isNaN(endsAt.getTime()) || endsAt <= startsAt) {
+            throw new Error("Set a valid campaign start and end time before approving this ad.");
+          }
+          if (!String(row.destination_url ?? "").startsWith("https://")) {
+            throw new Error("Add a secure HTTPS destination URL before approving this ad.");
+          }
+          if (!String(creative.title ?? "").trim()) {
+            throw new Error("Add an ad title before approving this campaign.");
+          }
+        }
         payload = action === "approve"
           ? { moderation_status: "approved", approved_by: userId, approved_at: now }
           : { moderation_status: "rejected", status: "paused" };
