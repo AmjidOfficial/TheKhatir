@@ -394,6 +394,9 @@ const Dashboard = () => {
                   <Link to="/dashboard/content" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
                     <span className="flex items-center gap-3"><FileText className="h-4 w-4 text-gold" /> SEO content studio</span><ArrowRight className="h-4 w-4" />
                   </Link>
+                  {isPlatformAdmin && <Link to="/dashboard/admin" className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm transition-colors hover:bg-primary/10">
+                    <span className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-gold" /> Platform moderation centre</span><ArrowRight className="h-4 w-4" />
+                  </Link>}
                   <Link to="/work" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
                     <span className="flex items-center gap-3"><Search className="h-4 w-4 text-gold" /> Browse properties</span><ArrowRight className="h-4 w-4" />
                   </Link>
