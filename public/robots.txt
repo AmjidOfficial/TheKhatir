@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /login
-Disallow: /dashboard
-Disallow: /dashboard/
+
+# Private workspace routes require authentication and return noindex metadata.
+# robots.txt is not an access-control mechanism.
 
 Sitemap: https://khatir.netlify.app/sitemap.xml
