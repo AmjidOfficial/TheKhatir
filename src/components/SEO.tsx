@@ -17,7 +17,7 @@ const SEO = ({ title, description, path, type = "website", image, jsonLd, robots
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   const url = new URL(normalizedPath, SITE_URL).toString();
   const absoluteImage = image ? new URL(image, SITE_URL).toString() : undefined;
-  const canonical = canonicalUrl && /^https?:\\/\\//i.test(canonicalUrl) ? canonicalUrl : url;
+  const canonical = canonicalUrl && (canonicalUrl.startsWith("https://") || canonicalUrl.startsWith("http://")) ? canonicalUrl : url;
   const robotsContent = robots ? robots.replaceAll(",", ", ") : "index, follow, max-image-preview:large";
 
   return (
