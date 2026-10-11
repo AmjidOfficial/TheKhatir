@@ -11,7 +11,7 @@ import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase
 import SEO from "@/components/SEO";
 
 type QueueRow = Record<string, unknown> & { id: string; tenant_id?: string | null };
-type TenantRow = { id: string; name: string; slug: string; status: string; is_public: boolean; business_type: string; city: string };
+type TenantRow = { id: string; name: string; slug: string; status: string; is_public: boolean; business_type: string; city: string; contact_email?: string | null; contact_phone?: string | null; website_url?: string | null };
 type QueueKey = "tenants" | "properties" | "projects" | "events" | "ads" | "content";
 
 const queueMeta: Record<QueueKey, { title: string; table: string; icon: typeof Building2; description: string }> = {
@@ -64,7 +64,7 @@ const PlatformAdmin = () => {
       }
 
       const [tenantResult, propertyResult, projectResult, eventResult, adResult, contentResult] = await Promise.all([
-        client.from("tenants").select("id,name,slug,status,is_public,business_type,city").order("created_at", { ascending: false }),
+        client.from("tenants").select("id,name,slug,status,is_public,business_type,city,contact_email,contact_phone,website_url").order("created_at", { ascending: false }),
         client.from("properties").select("*").eq("publication_status", "pending_review").order("updated_at", { ascending: false }),
         client.from("projects").select("*").eq("publication_status", "pending_review").order("updated_at", { ascending: false }),
         client.from("events").select("*").eq("publication_status", "pending_review").order("updated_at", { ascending: false }),
@@ -197,11 +197,11 @@ const PlatformAdmin = () => {
                       {tab === "properties" && <p className="mt-1 text-sm text-muted-foreground">{String(row.reference_code ?? "")} · {String(row.city ?? "")} · {String(row.price ?? "Price not set")}</p>}
                       {tab === "ads" && <p className="mt-1 text-sm text-muted-foreground">{String(row.product_type ?? "")} · {String(row.destination_url ?? "No destination set")}</p>}
                       {detail && <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-muted-foreground">{detail}</p>}
-                      {tab === "tenants" && <p className="mt-2 text-sm text-muted-foreground">{String(row.business_type ?? "").replaceAll("_"," ")} · {String(row.slug ?? "")}</p>}
+                      {tab === "tenants" && <div className="mt-2 space-y-1 text-sm text-muted-foreground"><p>{String(row.business_type ?? "").replaceAll("_"," ")} · {String(row.slug ?? "")}</p><p>{String(row.contact_email ?? "No contact email")} · {String(row.contact_phone ?? "No contact phone")}</p>{row.website_url ? <p>{String(row.website_url)}</p> : null}</div>}
                     </div>
                     <div className="flex w-full flex-col gap-2 lg:w-72">
                       {tab === "projects" && <div className="space-y-1"><Label htmlFor={"approval-" + row.id} className="text-xs">Authority approval reference</Label><Input id={"approval-" + row.id} value={approvalRefs[row.id] ?? ""} onChange={(event) => setApprovalRefs({ ...approvalRefs, [row.id]: event.target.value })} placeholder="Enter verified reference" /></div>}
-                      {(tab === "properties" || tab === "projects" || tab === "events" || tab === "content") && <div className="space-y-1"><Label htmlFor={"reason-" + row.id} className="text-xs">Rejection note (optional)</Label><Textarea id={"reason-" + row.id} value={rejectionNotes[row.id] ?? ""} onChange={(event) => setRejectionNotes({ ...rejectionNotes, [row.id]: event.target.value })} rows={2} maxLength={1000} placeholder="Why is this being rejected?" /></div>}
+                      {tab === "properties" && <div className="space-y-1"><Label htmlFor={"reason-" + row.id} className="text-xs">Rejection note (optional)</Label><Textarea id={"reason-" + row.id} value={rejectionNotes[row.id] ?? ""} onChange={(event) => setRejectionNotes({ ...rejectionNotes, [row.id]: event.target.value })} rows={2} maxLength={1000} placeholder="Why is this being rejected?" /></div>}
                       <div className="flex flex-wrap gap-2">
                         <Button size="sm" onClick={() => void runAction(row, "approve")} disabled={rowBusy || (tab === "projects" && !approvalRefs[row.id]?.trim()) || ((["properties","projects","events"].includes(tab) || (tab === "content" && Boolean(row.tenant_id))) && !canPublishForTenant(row))}><BadgeCheck className="h-4 w-4" />{tab === "tenants" ? "Activate & publish" : tab === "properties" ? "Verify & publish" : tab === "projects" ? "Verify & publish" : tab === "events" ? "Publish event" : tab === "ads" ? "Approve ad" : "Publish content"}</Button>
                         <Button size="sm" variant="outline" onClick={() => void runAction(row, "reject")} disabled={rowBusy}><XCircle className="h-4 w-4" />{tab === "tenants" ? "Suspend" : "Reject / archive"}</Button>
