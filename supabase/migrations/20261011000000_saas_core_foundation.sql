@@ -618,6 +618,7 @@ alter table public.leads
 create or replace function public.validate_tenant_relationships()
 returns trigger
 language plpgsql
+security definer
 set search_path = public
 as $$
 begin
@@ -628,6 +629,7 @@ begin
     if new.project_id is not null and not exists (
       select 1 from public.projects p where p.id = new.project_id and p.tenant_id = new.tenant_id
     ) then raise exception 'Lead project must belong to the same tenant'; end if;
+
   elsif tg_table_name = 'tasks' then
     if new.lead_id is not null and not exists (
       select 1 from public.leads l where l.id = new.lead_id and l.tenant_id = new.tenant_id
@@ -638,10 +640,12 @@ begin
     if new.project_id is not null and not exists (
       select 1 from public.projects p where p.id = new.project_id and p.tenant_id = new.tenant_id
     ) then raise exception 'Task project must belong to the same tenant'; end if;
+
   elsif tg_table_name = 'lead_activities' then
     if not exists (
       select 1 from public.leads l where l.id = new.lead_id and l.tenant_id = new.tenant_id
     ) then raise exception 'Activity lead must belong to the same tenant'; end if;
+
   elsif tg_table_name = 'event_registrations' then
     if not exists (
       select 1 from public.events e where e.id = new.event_id and e.tenant_id = new.tenant_id
@@ -649,15 +653,17 @@ begin
     if tg_op = 'INSERT' and new.status <> 'registered' then
       raise exception 'New registrations must start in registered status';
     end if;
-    if tg_op = 'UPDATE' and new.user_id = auth.uid()
-       and not public.can_manage_tenant(new.tenant_id)
-       and new.status <> 'cancelled' then
-      raise exception 'Customers may only cancel their own event registration';
+    if tg_op = 'UPDATE' then
+      if new.event_id is distinct from old.event_id or new.user_id is distinct from old.user_id then
+        raise exception 'Event registration identity cannot be changed';
+      end if;
+      if new.user_id = auth.uid()
+         and not public.can_manage_tenant(new.tenant_id)
+         and new.status <> 'cancelled' then
+        raise exception 'Customers may only cancel their own event registration';
+      end if;
     end if;
-    if tg_op = 'UPDATE' and new.user_id = auth.uid()
-       and (new.event_id is distinct from old.event_id or new.user_id is distinct from old.user_id) then
-      raise exception 'Event registration identity cannot be changed';
-    end if;
+
   elsif tg_table_name = 'ad_campaigns' then
     if new.property_id is not null and not exists (
       select 1 from public.properties p where p.id = new.property_id and p.tenant_id = new.tenant_id
@@ -672,22 +678,6 @@ begin
   return new;
 end;
 $$;
-
-drop trigger if exists validate_lead_tenant_relations on public.leads;
-create trigger validate_lead_tenant_relations before insert or update on public.leads
-for each row execute procedure public.validate_tenant_relationships();
-drop trigger if exists validate_task_tenant_relations on public.tasks;
-create trigger validate_task_tenant_relations before insert or update on public.tasks
-for each row execute procedure public.validate_tenant_relationships();
-drop trigger if exists validate_activity_tenant_relations on public.lead_activities;
-create trigger validate_activity_tenant_relations before insert or update on public.lead_activities
-for each row execute procedure public.validate_tenant_relationships();
-drop trigger if exists validate_registration_tenant_relations on public.event_registrations;
-create trigger validate_registration_tenant_relations before insert or update on public.event_registrations
-for each row execute procedure public.validate_tenant_relationships();
-drop trigger if exists validate_campaign_tenant_relations on public.ad_campaigns;
-create trigger validate_campaign_tenant_relations before insert or update on public.ad_campaigns
-for each row execute procedure public.validate_tenant_relationships();
 
 create index if not exists idx_memberships_user_status on public.tenant_memberships(user_id, status);
 create index if not exists idx_properties_public_search on public.properties(publication_status, city, listing_type, intent, price);
