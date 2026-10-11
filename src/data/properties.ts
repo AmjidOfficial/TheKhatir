@@ -6,6 +6,7 @@ import c2 from "@/assets/project-construction-2.jpg";
 
 export interface Property {
   id: string;
+  isSample?: boolean;
   image: string;
   title: string;
   location: string;
@@ -21,6 +22,7 @@ export interface Property {
 export const properties: Property[] = [
   {
     id: "awt-villa-10marla",
+    isSample: true,
     image: p1,
     title: "Modern 10 Marla Villa",
     location: "AWT Housing Scheme, Kohat Road, Peshawar",
@@ -35,6 +37,7 @@ export const properties: Property[] = [
   },
   {
     id: "kohat-road-plaza",
+    isSample: true,
     image: p2,
     title: "Commercial Plaza — Ground + 3",
     location: "Commercial Area, Kohat Road, Peshawar",
@@ -47,6 +50,7 @@ export const properties: Property[] = [
   },
   {
     id: "awt-plot-7marla",
+    isSample: true,
     image: p3,
     title: "Residential Plot — 7 Marla",
     location: "AWT Phase II, Peshawar",
@@ -59,6 +63,7 @@ export const properties: Property[] = [
   },
   {
     id: "hayatabad-apartment",
+    isSample: true,
     image: c2,
     title: "Luxury 3-Bed Apartment",
     location: "Hayatabad Phase 6, Peshawar",
@@ -73,6 +78,7 @@ export const properties: Property[] = [
   },
   {
     id: "awt-villa-1kanal",
+    isSample: true,
     image: c1,
     title: "1 Kanal Custom Built Home",
     location: "AWT Housing Scheme, Peshawar",
@@ -87,6 +93,7 @@ export const properties: Property[] = [
   },
   {
     id: "kohat-road-shop",
+    isSample: true,
     image: p2,
     title: "Ground Floor Shop",
     location: "Main Kohat Road, Peshawar",
