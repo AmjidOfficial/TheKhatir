@@ -1110,7 +1110,7 @@ where status = 'active' and is_public = true;
 create or replace view public.marketplace_properties with (security_barrier = true) as
 select p.id, p.reference_code, p.title, p.slug, p.description, p.listing_type, p.intent,
        p.price, p.currency, p.price_period, p.area_value, p.area_unit, p.bedrooms, p.bathrooms,
-       p.province, p.city, p.locality, p.society, p.block_sector, p.amenities,
+       p.province, p.city, p.locality, p.society, p.block_sector,
        p.verified_at, p.availability_confirmed_at, p.published_at, p.updated_at
 from public.properties p
 join public.tenants t on t.id = p.tenant_id
@@ -1121,7 +1121,7 @@ where p.publication_status = 'published'
 
 create or replace view public.marketplace_projects with (security_barrier = true) as
 select p.id, p.title, p.slug, p.project_type, p.summary, p.description,
-       p.province, p.city, p.locality, p.amenities,
+       p.province, p.city, p.locality,
        p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
 from public.projects p
 join public.tenants t on t.id = p.tenant_id
