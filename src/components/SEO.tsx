@@ -14,10 +14,19 @@ interface SEOProps {
 }
 
 const SEO = ({ title, description, path, type = "website", image, jsonLd, robots, canonicalUrl }: SEOProps) => {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(normalizedPath, SITE_URL).toString();
-  const absoluteImage = image ? new URL(image, SITE_URL).toString() : undefined;
-  const canonical = canonicalUrl && (canonicalUrl.startsWith("https://") || canonicalUrl.startsWith("http://")) ? canonicalUrl : url;
+  const normalizedPath = path.startsWith("/") ? path : "/" + path;
+  const safeHttpUrl = (value?: string) => {
+    if (!value) return undefined;
+    try {
+      const parsed = new URL(value, SITE_URL);
+      return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.toString() : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+  const url = safeHttpUrl(normalizedPath) ?? SITE_URL;
+  const absoluteImage = safeHttpUrl(image);
+  const canonical = safeHttpUrl(canonicalUrl) ?? url;
   const robotsContent = robots ? robots.replaceAll(",", ", ") : "index, follow, max-image-preview:large";
 
   return (
