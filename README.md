@@ -100,4 +100,4 @@ The repository CI workflow runs typecheck, lint and production build on Node.js 
 
 ## Repository strategy
 
-This repository, `AmjidOfficial/TheKhatir`, is the intended final repository. Consolidate valuable content from `AmjidOfficial/Khatir` here only after comparing the actual files and verifying that assets, SEO information, configuration and history are preserved. Keep the old repository available until the final deployment, rollback and backup checks are complete.
+This repository, `AmjidOfficial/TheKhatir`, is the intended final repository. The tree-level comparison and retirement plan are recorded in [Repository Consolidation](docs/REPOSITORY_CONSOLIDATION.md). The old repository includes a duplicate nested build output and an unsafe legacy deploy workflow, so it should not be copied wholesale. Keep the old repository available until the final deployment, rollback and backup checks are complete.
