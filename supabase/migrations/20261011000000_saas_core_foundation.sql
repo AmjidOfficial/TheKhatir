@@ -123,6 +123,84 @@ as $$
   );
 $$;
 
+create or replace function public.prevent_tenant_id_change()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $
+begin
+  if auth.uid() is not null
+     and not public.is_platform_admin()
+     and new.tenant_id is distinct from old.tenant_id then
+    raise exception 'Records cannot be moved between tenants';
+  end if;
+  return new;
+end;
+$;
+
+create or replace function public.guard_tenant_moderation_fields()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $
+begin
+  if auth.uid() is null or public.is_platform_admin() then
+    return new;
+  end if;
+
+  if tg_table_name = 'tenants' then
+    if new.status is distinct from old.status or new.is_public is distinct from old.is_public then
+      raise exception 'Only platform administrators may activate, suspend, or publish a business';
+    end if;
+  elsif tg_table_name = 'properties' then
+    if new.verification_status is distinct from old.verification_status
+       or new.verified_by is distinct from old.verified_by
+       or new.verified_at is distinct from old.verified_at then
+      raise exception 'Only platform administrators may change property verification';
+    end if;
+    if new.publication_status = 'published'
+       and (new.verification_status <> 'verified'
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
+      raise exception 'A property must be verified and its business active before publication';
+    end if;
+  elsif tg_table_name = 'projects' then
+    if new.approval_status is distinct from old.approval_status
+       or new.approval_reference is distinct from old.approval_reference
+       or new.approval_checked_at is distinct from old.approval_checked_at then
+      raise exception 'Only platform administrators may change project approval records';
+    end if;
+    if new.publication_status = 'published'
+       and (new.approval_status <> 'verified'
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
+      raise exception 'A project must have verified approval status and an active business before publication';
+    end if;
+  elsif tg_table_name = 'ad_campaigns' then
+    if new.moderation_status is distinct from old.moderation_status
+       or new.approved_by is distinct from old.approved_by
+       or new.approved_at is distinct from old.approved_at then
+      raise exception 'Only platform administrators may approve or reject advertising campaigns';
+    end if;
+    if new.status = 'active'
+       and (new.moderation_status <> 'approved'
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
+      raise exception 'A campaign must be approved and its business active before activation';
+    end if;
+  elsif tg_table_name = 'events' then
+    if new.publication_status = 'published' then
+      raise exception 'Events require platform review before publication';
+    end if;
+  elsif tg_table_name = 'content_pages' then
+    if new.publication_status = 'published' then
+      raise exception 'Content requires platform review before publication';
+    end if;
+  end if;
+
+  return new;
+end;
+$;
+
 create or replace function public.prevent_self_platform_role_change()
 returns trigger
 language plpgsql
@@ -525,6 +603,50 @@ begin
 end;
 $$;
 
+drop trigger if exists guard_tenant_status on public.tenants;
+create trigger guard_tenant_status
+before update on public.tenants
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+drop trigger if exists guard_property_moderation on public.properties;
+create trigger guard_property_moderation
+before update on public.properties
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+drop trigger if exists guard_project_moderation on public.projects;
+create trigger guard_project_moderation
+before update on public.projects
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+drop trigger if exists guard_campaign_moderation on public.ad_campaigns;
+create trigger guard_campaign_moderation
+before update on public.ad_campaigns
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+drop trigger if exists guard_event_moderation on public.events;
+create trigger guard_event_moderation
+before update on public.events
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+drop trigger if exists guard_content_moderation on public.content_pages;
+create trigger guard_content_moderation
+before update on public.content_pages
+for each row execute procedure public.guard_tenant_moderation_fields();
+
+do $
+declare
+  t text;
+begin
+  foreach t in array array[
+    'tenant_memberships','properties','projects','leads','lead_activities','tasks',
+    'events','event_registrations','ad_campaigns','content_pages'
+  ] loop
+    execute format('drop trigger if exists prevent_tenant_id_change on public.%I', t);
+    execute format('create trigger prevent_tenant_id_change before update on public.%I for each row execute procedure public.prevent_tenant_id_change()', t);
+  end loop;
+end;
+$;
+
 drop trigger if exists prevent_profile_role_change on public.user_profiles;
 create trigger prevent_profile_role_change
 before update on public.user_profiles
@@ -536,6 +658,26 @@ for each row execute procedure public.audit_sensitive_changes();
 
 drop trigger if exists audit_projects on public.projects;
 create trigger audit_projects after insert or update or delete on public.projects
+for each row execute procedure public.audit_sensitive_changes();
+
+drop trigger if exists audit_leads on public.leads;
+create trigger audit_leads after insert or update or delete on public.leads
+for each row execute procedure public.audit_sensitive_changes();
+
+drop trigger if exists audit_tasks on public.tasks;
+create trigger audit_tasks after insert or update or delete on public.tasks
+for each row execute procedure public.audit_sensitive_changes();
+
+drop trigger if exists audit_events on public.events;
+create trigger audit_events after insert or update or delete on public.events
+for each row execute procedure public.audit_sensitive_changes();
+
+drop trigger if exists audit_campaigns on public.ad_campaigns;
+create trigger audit_campaigns after insert or update or delete on public.ad_campaigns
+for each row execute procedure public.audit_sensitive_changes();
+
+drop trigger if exists audit_content_pages on public.content_pages;
+create trigger audit_content_pages after insert or update or delete on public.content_pages
 for each row execute procedure public.audit_sensitive_changes();
 
 drop trigger if exists audit_tenant_memberships on public.tenant_memberships;
@@ -782,7 +924,7 @@ with check (
   and exists (
     select 1 from public.events e
     where e.id = event_id
-      and e.tenant_id = tenant_id
+      and e.tenant_id = event_registrations.tenant_id
       and e.publication_status = 'published'
   )
 );
