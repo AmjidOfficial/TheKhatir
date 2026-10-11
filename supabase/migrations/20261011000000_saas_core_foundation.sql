@@ -1149,7 +1149,7 @@ select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
        jsonb_build_object(
          'title', nullif(c.creative ->> 'title', ''),
          'description', nullif(c.creative ->> 'description', ''),
-         'image_url', case when c.creative ->> 'image_url' ~ '^https?://' then c.creative ->> 'image_url' else null end,
+         'image_url', case when (c.creative ->> 'image_url') ~ '^https?://' then c.creative ->> 'image_url' else null end,
          'alt_text', nullif(c.creative ->> 'alt_text', '')
        ) as creative,
        c.target_locations, c.starts_at, c.ends_at
