@@ -17,16 +17,18 @@
 1. The app is built with React, TypeScript, Vite, Tailwind, and shadcn/ui.
 2. The property collection and blog content are currently represented in local source data. A live, managed property inventory has not been confirmed.
 3. The Supabase client package and client initialization exist, but the generated database types contain no application tables. This is not evidence of a complete production data model.
-4. The Supabase client expects `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Environment configuration must be confirmed for each environment.
-5. The blog newsletter controls are presentation-only and do not yet submit to a verified subscription service.
-6. Listing details must distinguish verified live inventory from sample content. Never treat sample prices or descriptions as current offers.
-7. Contact, ownership, approval, and listing information must be verified with the business before public launch.
-8. Netlify SPA redirects and sitemap/robots files exist. Confirm the production domain, canonical URLs, sitemap routes, and deep-link refresh behavior after deployment.
+4. The Supabase client expects `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. An example environment file is included; each deployment still needs the correct project values.
+5. The repository's `supabase/config.toml` references project ID `drzkvcpymitfflhlpogj`, but the connected Supabase account currently exposes only a different project, `N-LINK360` (`nigvxsjrvkmynwduvemy`), which is marked inactive. Access to the Khatir project could not be verified. Do not connect Khatir to N-LINK360 by assumption; confirm the intended Supabase project and grant access before database changes.
+6. The blog newsletter controls were not connected to a subscription service. The page now directs visitors to WhatsApp instead of pretending to subscribe them.
+7. Listing details must distinguish verified live inventory from sample content. Never treat sample prices or descriptions as current offers.
+8. Contact, ownership, approval, and listing information must be verified with the business before public launch.
+9. Netlify SPA redirects and sitemap/robots files exist. Confirm the production domain, canonical URLs, sitemap routes, and deep-link refresh behavior after deployment.
+10. The package scripts include build and lint, but no test script was found in `package.json`.
 
 ### Not yet verified
 
-- Supabase schema, migrations, Row Level Security (RLS), storage policies, and authentication roles
-- Whether the production environment variables are set correctly
+- Khatir Supabase schema, migrations, Row Level Security (RLS), storage policies, and authentication roles
+- Whether production environment variables are set correctly
 - Whether every property, blog, contact, and admin flow works end-to-end
 - Build, lint, accessibility, mobile, performance, and SEO results in CI
 - Backup/restore procedure and monitoring
@@ -74,6 +76,7 @@
 - Keep `TheKhatir` as the only active codebase.
 - Set up protected branches, pull requests, and automated build/lint checks.
 - Confirm Netlify build settings and environment variables.
+- Confirm access to the correct Khatir Supabase project before enabling database-backed features.
 - Inspect Supabase schema, RLS, storage policies, and authentication before enabling any admin features.
 - Replace or visibly mark all sample properties and unverified claims.
 - Verify contact details and social URLs with the business owner.
