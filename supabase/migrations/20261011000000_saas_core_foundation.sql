@@ -1129,7 +1129,7 @@ where p.publication_status = 'published' and p.approval_status = 'verified' and 
 
 create or replace view public.marketplace_events with (security_barrier = true) as
 select e.id, e.title, e.slug, e.event_type, e.description, e.starts_at, e.ends_at,
-       e.timezone, e.venue, e.cover_image_url, e.capacity
+       e.timezone, e.venue, e.capacity
 from public.events e
 join public.tenants t on t.id = e.tenant_id
 where e.publication_status = 'published' and t.status = 'active' and t.is_public = true;
