@@ -823,8 +823,8 @@ with check (id = auth.uid() or public.is_platform_admin());
 
 drop policy if exists "tenants_read_public_or_member" on public.tenants;
 create policy "tenants_read_public_or_member" on public.tenants
-for select
-using ((status = 'active' and is_public = true) or public.is_tenant_member(id) or public.is_platform_admin());
+for select to authenticated
+using (public.is_tenant_member(id) or public.is_platform_admin());
 
 drop policy if exists "tenants_create_authenticated" on public.tenants;
 create policy "tenants_create_authenticated" on public.tenants
@@ -868,14 +868,8 @@ using (public.can_manage_tenant(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "properties_read_published_or_tenant" on public.properties;
 create policy "properties_read_published_or_tenant" on public.properties
-for select
-using (
-  (publication_status = 'published' and verification_status = 'verified'
-    and (expires_at is null or expires_at > now())
-    and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
-  or public.is_tenant_member(tenant_id)
-  or public.is_platform_admin()
-);
+for select to authenticated
+using (public.is_tenant_member(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "properties_create_authorised" on public.properties;
 create policy "properties_create_authorised" on public.properties
@@ -895,13 +889,8 @@ using (public.can_manage_tenant(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "projects_read_published_or_tenant" on public.projects;
 create policy "projects_read_published_or_tenant" on public.projects
-for select
-using (
-  (publication_status = 'published' and approval_status = 'verified'
-    and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
-  or public.is_tenant_member(tenant_id)
-  or public.is_platform_admin()
-);
+for select to authenticated
+using (public.is_tenant_member(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "projects_create_authorised" on public.projects;
 create policy "projects_create_authorised" on public.projects
@@ -1007,12 +996,8 @@ using (public.can_manage_tenant(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "events_read_public_or_tenant" on public.events;
 create policy "events_read_public_or_tenant" on public.events
-for select
-using (
-  (publication_status = 'published' and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
-  or public.is_tenant_member(tenant_id)
-  or public.is_platform_admin()
-);
+for select to authenticated
+using (public.is_tenant_member(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "events_create_editor" on public.events;
 create policy "events_create_editor" on public.events
@@ -1056,12 +1041,8 @@ with check (user_id = auth.uid() or public.can_manage_tenant(tenant_id) or publi
 
 drop policy if exists "campaigns_read_owner_or_public_active" on public.ad_campaigns;
 create policy "campaigns_read_owner_or_public_active" on public.ad_campaigns
-for select
-using (
-  (status = 'active' and moderation_status = 'approved' and starts_at <= now() and (ends_at is null or ends_at > now()))
-  or public.is_tenant_member(tenant_id)
-  or public.is_platform_admin()
-);
+for select to authenticated
+using (public.is_tenant_member(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "campaigns_create_manager" on public.ad_campaigns;
 create policy "campaigns_create_manager" on public.ad_campaigns
@@ -1081,12 +1062,9 @@ using (public.can_manage_tenant(tenant_id) or public.is_platform_admin());
 
 drop policy if exists "content_read_published" on public.content_pages;
 create policy "content_read_published" on public.content_pages
-for select
+for select to authenticated
 using (
-  (publication_status = 'published' and (tenant_id is null or exists (
-    select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'
-  )))
-  or (tenant_id is not null and public.can_manage_listings(tenant_id))
+  (tenant_id is not null and public.is_tenant_member(tenant_id))
   or public.is_platform_admin()
 );
 
@@ -1124,12 +1102,12 @@ grant usage on schema public to anon, authenticated;
 grant select on public.tenants, public.properties, public.projects, public.events, public.ad_campaigns, public.content_pages to authenticated;
 
 -- Public clients use allow-listed views, not base tables with internal workflow fields.
-create or replace view public.marketplace_businesses with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_businesses with (security_barrier = true) as
 select id, name, slug, business_type, logo_url, website_url, contact_email, contact_phone, country_code, city
 from public.tenants
 where status = 'active' and is_public = true;
 
-create or replace view public.marketplace_properties with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_properties with (security_barrier = true) as
 select p.id, p.reference_code, p.title, p.slug, p.description, p.listing_type, p.intent,
        p.price, p.currency, p.price_period, p.area_value, p.area_unit, p.bedrooms, p.bathrooms,
        p.province, p.city, p.locality, p.society, p.block_sector, p.amenities, p.media,
@@ -1139,67 +1117,47 @@ join public.tenants t on t.id = p.tenant_id
 where p.publication_status = 'published'
   and p.verification_status = 'verified'
   and (p.expires_at is null or p.expires_at > now())
-  and t.status = 'active';
+  and t.status = 'active' and t.is_public = true;
 
-create or replace view public.marketplace_projects with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_projects with (security_barrier = true) as
 select p.id, p.title, p.slug, p.project_type, p.summary, p.description,
        p.province, p.city, p.locality, p.amenities, p.media, p.brochure_url,
        p.payment_plan_url, p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
 from public.projects p
 join public.tenants t on t.id = p.tenant_id
-where p.publication_status = 'published' and p.approval_status = 'verified' and t.status = 'active';
+where p.publication_status = 'published' and p.approval_status = 'verified' and t.status = 'active' and t.is_public = true;
 
-create or replace view public.marketplace_events with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_events with (security_barrier = true) as
 select e.id, e.title, e.slug, e.event_type, e.description, e.starts_at, e.ends_at,
        e.timezone, e.venue, e.online_url, e.cover_image_url, e.capacity
 from public.events e
 join public.tenants t on t.id = e.tenant_id
-where e.publication_status = 'published' and t.status = 'active';
+where e.publication_status = 'published' and t.status = 'active' and t.is_public = true;
 
-create or replace view public.marketplace_content with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_content with (security_barrier = true) as
 select c.id, c.title, c.slug, c.content_type, c.excerpt, c.body, c.meta_title,
        c.meta_description, c.canonical_url, c.social_image_url, c.robots_directive, c.published_at
 from public.content_pages c
 where c.publication_status = 'published'
   and (c.tenant_id is null or exists (
-    select 1 from public.tenants t where t.id = c.tenant_id and t.status = 'active'
+    select 1 from public.tenants t where t.id = c.tenant_id and t.status = 'active' and t.is_public = true
   ));
 
-create or replace view public.marketplace_ad_placements with (security_barrier = true, security_invoker = true) as
+create or replace view public.marketplace_ad_placements with (security_barrier = true) as
 select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
        c.destination_url, c.creative, c.target_locations, c.starts_at, c.ends_at
 from public.ad_campaigns c
 join public.tenants t on t.id = c.tenant_id
 where c.status = 'active' and c.moderation_status = 'approved'
   and c.starts_at <= now() and (c.ends_at is null or c.ends_at > now())
-  and t.status = 'active';
+  and t.status = 'active' and t.is_public = true;
 
 revoke all on public.tenants, public.properties, public.projects, public.events,
   public.ad_campaigns, public.content_pages from anon;
 
--- Column grants allow the invoker-security views to run while keeping internal columns private.
--- RLS still decides which rows may be returned.
-grant select (id, name, slug, business_type, logo_url, website_url, contact_email,
-  contact_phone, country_code, city, status, is_public) on public.tenants to anon;
-grant select (id, tenant_id, reference_code, title, slug, description, listing_type, intent,
-  price, currency, price_period, area_value, area_unit, bedrooms, bathrooms, province, city,
-  locality, society, block_sector, amenities, media, verified_at, availability_confirmed_at,
-  published_at, updated_at, publication_status, verification_status, expires_at)
-  on public.properties to anon;
-grant select (id, tenant_id, title, slug, project_type, summary, description, province, city,
-  locality, amenities, media, brochure_url, payment_plan_url, approval_status,
-  approval_reference, approval_checked_at, published_at, publication_status)
-  on public.projects to anon;
-grant select (id, tenant_id, title, slug, event_type, description, starts_at, ends_at,
-  timezone, venue, online_url, cover_image_url, capacity, publication_status)
-  on public.events to anon;
-grant select (id, tenant_id, title, slug, content_type, excerpt, body, meta_title,
-  meta_description, canonical_url, social_image_url, robots_directive, published_at,
-  publication_status) on public.content_pages to anon;
-grant select (id, tenant_id, product_type, property_id, project_id, event_id,
-  destination_url, creative, target_locations, starts_at, ends_at, status, moderation_status)
-  on public.ad_campaigns to anon;
-
+-- The public views are deliberately security-barrier views with fixed public filters and allow-listed
+-- columns. Base tables remain private to authenticated tenant members; anonymous clients only receive
+-- SELECT on these curated views, never on the underlying tables.
 grant select on public.marketplace_businesses, public.marketplace_properties,
   public.marketplace_projects, public.marketplace_events, public.marketplace_content,
   public.marketplace_ad_placements to anon, authenticated;
