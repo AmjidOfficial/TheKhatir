@@ -170,6 +170,11 @@ begin
   end if;
 
   if tg_table_name = 'tenants' then
+    if new.id is distinct from old.id
+       or new.created_by is distinct from old.created_by
+       or new.created_at is distinct from old.created_at then
+      raise exception 'Tenant identity and ownership history cannot be changed';
+    end if;
     if new.status is distinct from old.status or new.is_public is distinct from old.is_public then
       raise exception 'Only platform administrators may activate, suspend, or publish a business';
     end if;
@@ -726,7 +731,12 @@ begin
 
   if tg_op = 'INSERT' then
     -- The tenant-creation trigger may create the first owner membership.
-    if new.user_id = auth.uid() and new.role = 'owner' then
+    if new.user_id = auth.uid() and new.role = 'owner' and exists (
+      select 1 from public.tenants t
+      where t.id = new.tenant_id
+        and t.created_by = new.user_id
+        and t.created_at >= now() - interval '1 minute'
+    ) then
       return new;
     end if;
     if not public.can_manage_tenant(new.tenant_id) then
