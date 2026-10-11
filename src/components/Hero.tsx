@@ -59,16 +59,16 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Trust strip */}
-        <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto reveal-delayed">
+        {/* Service highlights, without unverified business statistics */}
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto reveal-delayed">
           {[
-            { k: "20+", v: "Years Trusted" },
-            { k: "500+", v: "Happy Clients" },
-            { k: "100%", v: "On-Time Delivery" },
-          ].map((s) => (
-            <div key={s.v} className="text-center">
-              <div className="text-3xl md:text-4xl font-light text-gold">{s.k}</div>
-              <div className="text-minimal text-white/90 mt-1">{s.v}</div>
+            { title: "Local market guidance", detail: "Peshawar and nearby areas" },
+            { title: "Property & construction", detail: "One team for your next step" },
+            { title: "Direct consultation", detail: "Talk to our team on WhatsApp" },
+          ].map((item) => (
+            <div key={item.title} className="rounded-xl border border-white/15 bg-black/20 px-4 py-4 text-center backdrop-blur-sm">
+              <div className="text-sm md:text-base font-medium text-white">{item.title}</div>
+              <div className="text-xs md:text-sm text-white/75 mt-1">{item.detail}</div>
             </div>
           ))}
         </div>
