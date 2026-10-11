@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { COMPANY } from "@/lib/company";
+import SEO from "@/components/SEO";
 import logo from "@/assets/khatir-logo.png";
 
 type Workspace = {
@@ -238,7 +239,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      <main className="flex min-h-screen items-center justify-center bg-background px-4"><SEO title="Workspace dashboard | Khatir" description="Private Khatir business workspace." path="/dashboard" robots="noindex,nofollow" />
         <div className="flex items-center gap-3 text-muted-foreground"><LoaderCircle className="h-5 w-5 animate-spin" /> Loading your secure workspace…</div>
       </main>
     );
@@ -246,6 +247,7 @@ const Dashboard = () => {
 
   return (
     <main className="min-h-screen bg-muted/30">
+      <SEO title="Workspace dashboard | Khatir" description="Private Khatir business workspace." path="/dashboard" robots="noindex,nofollow" />
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3">
