@@ -244,7 +244,10 @@ const BusinessOpsAdmin = () => {
       });
       if (module === "ads") payload.creative = creative;
       const titleValue = String(payload.title ?? payload.name ?? "");
-      if (payload.title !== undefined) {\n        const existingSlug = editingId ? String(rows.find((row) => String(row.id) === editingId)?.slug ?? "") : "";\n        payload.slug = slugify(titleValue) || existingSlug || (String(module) + "-" + Date.now().toString(36));\n      }
+      if (payload.title !== undefined) {
+        const existingSlug = editingId ? String(rows.find((row) => String(row.id) === editingId)?.slug ?? "") : "";
+        payload.slug = slugify(titleValue) || existingSlug || (String(module) + "-" + Date.now().toString(36));
+      }
       if (!editingId) {
         payload.tenant_id = activeWorkspace.id;
         payload.created_by = authData.user.id;
