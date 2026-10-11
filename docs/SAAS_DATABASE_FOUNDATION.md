@@ -38,7 +38,7 @@ Public pages should query these allow-listed views rather than select full base-
 - `marketplace_content`
 - `marketplace_ad_placements`
 
-The views use PostgreSQL `security_invoker = true` so underlying RLS rules still apply, and they omit private assignment, moderation, and billing fields. Anonymous access is granted only to the columns needed by those views. Keep their filters restrictive and add automated tests before adding more columns.
+The marketplace views are intentionally curated, security-barrier views with fixed public filters and an allow-list of columns. They use the view owner's permissions by design, so their SQL must stay restrictive and must never include private fields. Anonymous clients receive no access to the base tables. Keep the public filters restrictive and add automated tests before adding more columns.
 
 ## Still required before production
 
