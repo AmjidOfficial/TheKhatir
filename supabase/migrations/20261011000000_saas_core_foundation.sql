@@ -1125,12 +1125,12 @@ grant usage on schema public to anon, authenticated;
 grant select on public.tenants, public.properties, public.projects, public.events, public.ad_campaigns, public.content_pages to authenticated;
 
 -- Public clients use allow-listed views, not base tables with internal workflow fields.
-create or replace view public.marketplace_businesses with (security_barrier = true) as
+create or replace view public.marketplace_businesses with (security_barrier = true, security_invoker = true) as
 select id, name, slug, business_type, logo_url, website_url, contact_email, contact_phone, country_code, city
 from public.tenants
 where status = 'active' and is_public = true;
 
-create or replace view public.marketplace_properties with (security_barrier = true) as
+create or replace view public.marketplace_properties with (security_barrier = true, security_invoker = true) as
 select p.id, p.reference_code, p.title, p.slug, p.description, p.listing_type, p.intent,
        p.price, p.currency, p.price_period, p.area_value, p.area_unit, p.bedrooms, p.bathrooms,
        p.province, p.city, p.locality, p.society, p.block_sector, p.amenities, p.media,
@@ -1142,7 +1142,7 @@ where p.publication_status = 'published'
   and (p.expires_at is null or p.expires_at > now())
   and t.status = 'active';
 
-create or replace view public.marketplace_projects with (security_barrier = true) as
+create or replace view public.marketplace_projects with (security_barrier = true, security_invoker = true) as
 select p.id, p.title, p.slug, p.project_type, p.summary, p.description,
        p.province, p.city, p.locality, p.amenities, p.media, p.brochure_url,
        p.payment_plan_url, p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
@@ -1150,14 +1150,14 @@ from public.projects p
 join public.tenants t on t.id = p.tenant_id
 where p.publication_status = 'published' and p.approval_status = 'verified' and t.status = 'active';
 
-create or replace view public.marketplace_events with (security_barrier = true) as
+create or replace view public.marketplace_events with (security_barrier = true, security_invoker = true) as
 select e.id, e.title, e.slug, e.event_type, e.description, e.starts_at, e.ends_at,
        e.timezone, e.venue, e.online_url, e.cover_image_url, e.capacity
 from public.events e
 join public.tenants t on t.id = e.tenant_id
 where e.publication_status = 'published' and t.status = 'active';
 
-create or replace view public.marketplace_content with (security_barrier = true) as
+create or replace view public.marketplace_content with (security_barrier = true, security_invoker = true) as
 select c.id, c.title, c.slug, c.content_type, c.excerpt, c.body, c.meta_title,
        c.meta_description, c.canonical_url, c.social_image_url, c.robots_directive, c.published_at
 from public.content_pages c
@@ -1166,7 +1166,7 @@ where c.publication_status = 'published'
     select 1 from public.tenants t where t.id = c.tenant_id and t.status = 'active'
   ));
 
-create or replace view public.marketplace_ad_placements with (security_barrier = true) as
+create or replace view public.marketplace_ad_placements with (security_barrier = true, security_invoker = true) as
 select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
        c.destination_url, c.creative, c.target_locations, c.starts_at, c.ends_at
 from public.ad_campaigns c
@@ -1177,9 +1177,55 @@ where c.status = 'active' and c.moderation_status = 'approved'
 
 revoke all on public.tenants, public.properties, public.projects, public.events,
   public.ad_campaigns, public.content_pages from anon;
+
+-- Column grants allow the invoker-security views to run while keeping internal columns private.
+-- RLS still decides which rows may be returned.
+grant select (id, name, slug, business_type, logo_url, website_url, contact_email,
+  contact_phone, country_code, city, status, is_public) on public.tenants to anon;
+grant select (id, tenant_id, reference_code, title, slug, description, listing_type, intent,
+  price, currency, price_period, area_value, area_unit, bedrooms, bathrooms, province, city,
+  locality, society, block_sector, amenities, media, verified_at, availability_confirmed_at,
+  published_at, updated_at, publication_status, verification_status, expires_at)
+  on public.properties to anon;
+grant select (id, tenant_id, title, slug, project_type, summary, description, province, city,
+  locality, amenities, media, brochure_url, payment_plan_url, approval_status,
+  approval_reference, approval_checked_at, published_at, publication_status)
+  on public.projects to anon;
+grant select (id, tenant_id, title, slug, event_type, description, starts_at, ends_at,
+  timezone, venue, online_url, cover_image_url, capacity, publication_status)
+  on public.events to anon;
+grant select (id, tenant_id, title, slug, content_type, excerpt, body, meta_title,
+  meta_description, canonical_url, social_image_url, robots_directive, published_at,
+  publication_status) on public.content_pages to anon;
+grant select (id, tenant_id, product_type, property_id, project_id, event_id,
+  destination_url, creative, target_locations, starts_at, ends_at, status, moderation_status)
+  on public.ad_campaigns to anon;
+
 grant select on public.marketplace_businesses, public.marketplace_properties,
   public.marketplace_projects, public.marketplace_events, public.marketplace_content,
   public.marketplace_ad_placements to anon, authenticated;
+
+-- Trigger-only functions must not be callable as public RPC endpoints.
+revoke all on function public.set_updated_at() from public, anon, authenticated;
+revoke all on function public.prevent_tenant_id_change() from public, anon, authenticated;
+revoke all on function public.guard_tenant_moderation_fields() from public, anon, authenticated;
+revoke all on function public.prevent_self_platform_role_change() from public, anon, authenticated;
+revoke all on function public.bootstrap_profile() from public, anon, authenticated;
+revoke all on function public.bootstrap_tenant_owner() from public, anon, authenticated;
+revoke all on function public.prevent_membership_privilege_escalation() from public, anon, authenticated;
+revoke all on function public.audit_sensitive_changes() from public, anon, authenticated;
+revoke all on function public.guard_audit_log_mutation() from public, anon, authenticated;
+revoke all on function public.validate_tenant_relationships() from public, anon, authenticated;
+
+-- These narrowly scoped helpers only answer questions about the current caller's own access.
+revoke all on function public.is_platform_admin() from public, anon, authenticated;
+revoke all on function public.is_tenant_member(uuid) from public, anon, authenticated;
+revoke all on function public.can_manage_tenant(uuid) from public, anon, authenticated;
+revoke all on function public.can_manage_listings(uuid) from public, anon, authenticated;
+grant execute on function public.is_platform_admin() to anon, authenticated;
+grant execute on function public.is_tenant_member(uuid) to anon, authenticated;
+grant execute on function public.can_manage_tenant(uuid) to anon, authenticated;
+grant execute on function public.can_manage_listings(uuid) to anon, authenticated;
 grant select, update on public.user_profiles to authenticated;
 grant select, insert, update, delete on public.tenant_memberships to authenticated;
 grant insert, update, delete on public.tenants to authenticated;
