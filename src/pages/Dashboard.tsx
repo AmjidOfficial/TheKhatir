@@ -380,6 +380,18 @@ const Dashboard = () => {
                   <Link to="/dashboard/properties" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
                     <span className="flex items-center gap-3"><Building2 className="h-4 w-4 text-gold" /> Manage property inventory</span><ArrowRight className="h-4 w-4" />
                   </Link>
+                  <Link to="/dashboard/projects" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
+                    <span className="flex items-center gap-3"><FolderKanban className="h-4 w-4 text-gold" /> Developer & construction projects</span><ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link to="/dashboard/events" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
+                    <span className="flex items-center gap-3"><CalendarDays className="h-4 w-4 text-gold" /> Events & site visits</span><ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link to="/dashboard/ads" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
+                    <span className="flex items-center gap-3"><Megaphone className="h-4 w-4 text-gold" /> Advertising campaigns</span><ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link to="/dashboard/content" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
+                    <span className="flex items-center gap-3"><FileText className="h-4 w-4 text-gold" /> SEO content studio</span><ArrowRight className="h-4 w-4" />
+                  </Link>
                   <Link to="/work" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
                     <span className="flex items-center gap-3"><Search className="h-4 w-4 text-gold" /> Browse properties</span><ArrowRight className="h-4 w-4" />
                   </Link>
