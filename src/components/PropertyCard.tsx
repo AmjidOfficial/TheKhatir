@@ -14,7 +14,12 @@ const PropertyCard = ({ property }: { property: Property }) => {
           loading="lazy"
           className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute top-4 left-4 flex gap-2">
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          {property.isSample && (
+            <span className="rounded bg-amber-100 px-3 py-1 text-xs font-semibold tracking-wider text-amber-950">
+              SAMPLE ONLY
+            </span>
+          )}
           <span className="bg-gold text-gold-foreground px-3 py-1 text-xs font-semibold tracking-wider rounded">
             {property.status}
           </span>
@@ -31,7 +36,12 @@ const PropertyCard = ({ property }: { property: Property }) => {
           {property.location}
         </p>
 
-        <p className="text-2xl font-light text-gold mb-4">{property.price}</p>
+        <p className="text-2xl font-light text-gold mb-2">{property.price}</p>
+        {property.isSample && (
+          <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
+            Illustrative example only. Price and availability have not been confirmed.
+          </p>
+        )}
 
         <div className="flex items-center gap-5 text-sm text-muted-foreground mb-4 pb-4 border-b border-border">
           {property.beds !== undefined && (
