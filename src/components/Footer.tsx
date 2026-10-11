@@ -52,6 +52,7 @@ const Footer = () => {
               <li><a href="/about" className="hover:text-gold transition-colors">About</a></li>
               <li><a href="/blog" className="hover:text-gold transition-colors">Blog</a></li>
               <li><a href="/contact" className="hover:text-gold transition-colors">Contact</a></li>
+              <li><a href="/login" className="hover:text-gold transition-colors">Business Workspace</a></li>
               <li>
                 <a href={waLink()} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
                   WhatsApp Us
