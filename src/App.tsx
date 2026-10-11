@@ -16,6 +16,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import PropertiesAdmin from "./pages/PropertiesAdmin";
 import LeadsAdmin from "./pages/LeadsAdmin";
+import BusinessOpsAdmin from "./pages/BusinessOpsAdmin";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/properties" element={<PropertiesAdmin />} />
           <Route path="/dashboard/leads" element={<LeadsAdmin />} />
+          <Route path="/dashboard/:module" element={<BusinessOpsAdmin />} />
           <Route path="/work" element={<Work />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/services" element={<Services />} />
