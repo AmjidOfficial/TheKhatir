@@ -1110,7 +1110,7 @@ where status = 'active' and is_public = true;
 create or replace view public.marketplace_properties with (security_barrier = true) as
 select p.id, p.reference_code, p.title, p.slug, p.description, p.listing_type, p.intent,
        p.price, p.currency, p.price_period, p.area_value, p.area_unit, p.bedrooms, p.bathrooms,
-       p.province, p.city, p.locality, p.society, p.block_sector, p.amenities, p.media,
+       p.province, p.city, p.locality, p.society, p.block_sector, p.amenities,
        p.verified_at, p.availability_confirmed_at, p.published_at, p.updated_at
 from public.properties p
 join public.tenants t on t.id = p.tenant_id
@@ -1121,15 +1121,15 @@ where p.publication_status = 'published'
 
 create or replace view public.marketplace_projects with (security_barrier = true) as
 select p.id, p.title, p.slug, p.project_type, p.summary, p.description,
-       p.province, p.city, p.locality, p.amenities, p.media, p.brochure_url,
-       p.payment_plan_url, p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
+       p.province, p.city, p.locality, p.amenities,
+       p.approval_status, p.approval_reference, p.approval_checked_at, p.published_at
 from public.projects p
 join public.tenants t on t.id = p.tenant_id
 where p.publication_status = 'published' and p.approval_status = 'verified' and t.status = 'active' and t.is_public = true;
 
 create or replace view public.marketplace_events with (security_barrier = true) as
 select e.id, e.title, e.slug, e.event_type, e.description, e.starts_at, e.ends_at,
-       e.timezone, e.venue, e.online_url, e.cover_image_url, e.capacity
+       e.timezone, e.venue, e.cover_image_url, e.capacity
 from public.events e
 join public.tenants t on t.id = e.tenant_id
 where e.publication_status = 'published' and t.status = 'active' and t.is_public = true;
@@ -1145,7 +1145,14 @@ where c.publication_status = 'published'
 
 create or replace view public.marketplace_ad_placements with (security_barrier = true) as
 select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
-       c.destination_url, c.creative, c.target_locations, c.starts_at, c.ends_at
+       case when c.destination_url ~ '^https?://' then c.destination_url else null end as destination_url,
+       jsonb_build_object(
+         'title', nullif(c.creative ->> 'title', ''),
+         'description', nullif(c.creative ->> 'description', ''),
+         'image_url', case when c.creative ->> 'image_url' ~ '^https?://' then c.creative ->> 'image_url' else null end,
+         'alt_text', nullif(c.creative ->> 'alt_text', '')
+       ) as creative,
+       c.target_locations, c.starts_at, c.ends_at
 from public.ad_campaigns c
 join public.tenants t on t.id = c.tenant_id
 where c.status = 'active' and c.moderation_status = 'approved'
@@ -1155,9 +1162,10 @@ where c.status = 'active' and c.moderation_status = 'approved'
 revoke all on public.tenants, public.properties, public.projects, public.events,
   public.ad_campaigns, public.content_pages from anon;
 
--- The public views are deliberately security-barrier views with fixed public filters and allow-listed
--- columns. Base tables remain private to authenticated tenant members; anonymous clients only receive
--- SELECT on these curated views, never on the underlying tables.
+-- These are intentionally curated public views: fixed publication/tenant filters and an allow-list
+-- of public columns. They use the view owner's permissions by design, so keep their SQL restrictive,
+-- never add private columns casually, and test the public API after every schema change. Base tables
+-- remain private to authenticated tenant members; anonymous clients receive no base-table access.
 grant select on public.marketplace_businesses, public.marketplace_properties,
   public.marketplace_projects, public.marketplace_events, public.marketplace_content,
   public.marketplace_ad_placements to anon, authenticated;
