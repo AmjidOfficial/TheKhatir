@@ -1,4 +1,4 @@
-import { MapPin, Bed, Bath, Maximize, MessageCircle } from "lucide-react";
+import { MapPin, Bed, Bath, Maximize, MessageCircle, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Property } from "@/data/properties";
 import { waLink } from "@/lib/company";
@@ -9,12 +9,19 @@ const PropertyCard = ({ property }: { property: Property }) => {
   return (
     <article className="group overflow-hidden rounded-lg border border-border bg-card transition-all duration-500 hover:border-gold hover:shadow-elegant">
       <div className="relative overflow-hidden">
-        <img
-          src={property.image}
-          alt={property.title}
-          loading="lazy"
-          className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        {property.image ? (
+          <img
+            src={property.image}
+            alt={property.title}
+            loading="lazy"
+            className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-72 w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary/10 via-muted to-gold/10 text-muted-foreground">
+            <Building2 aria-hidden="true" className="h-12 w-12 text-gold/80" />
+            <span className="text-xs font-medium uppercase tracking-widest">Listing photo not provided</span>
+          </div>
+        )}
         <div className="absolute top-4 left-4 flex flex-wrap gap-2">
           {property.isSample && (
             <span className="rounded bg-amber-100 px-3 py-1 text-xs font-semibold tracking-wider text-amber-950">
