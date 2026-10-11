@@ -47,6 +47,7 @@ Set the public Supabase project URL and publishable/anon key in `.env.local` onl
 6. Test mobile layouts, keyboard navigation, forms, page refresh/deep links, and error states before release.
 7. Keep this repository as the single source of truth. Review changes in branches/PRs and verify the production build before deploying.
 
-## Project plan
+## Project documents
 
-See [docs/PROJECT_AUDIT_AND_ROADMAP.md](docs/PROJECT_AUDIT_AND_ROADMAP.md) for the current audit findings, launch blockers, and phased delivery plan.
+- [Project audit and delivery roadmap](docs/PROJECT_AUDIT_AND_ROADMAP.md)
+- [Full platform product spec and acceptance plan](docs/PLATFORM_PRODUCT_SPEC.md)
