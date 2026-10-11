@@ -1253,6 +1253,7 @@ where c.publication_status = 'published'
 
 create or replace view public.marketplace_ad_placements with (security_barrier = true) as
 select c.id, c.product_type, c.property_id, c.project_id, c.event_id,
+       t.name as advertiser_name, t.slug as advertiser_slug,
        case when c.destination_url ~ '^https://' then c.destination_url else null end as destination_url,
        jsonb_build_object(
          'title', nullif(c.creative ->> 'title', ''),
