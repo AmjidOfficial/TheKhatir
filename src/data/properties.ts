@@ -10,7 +10,7 @@ export interface Property {
   image: string;
   title: string;
   location: string;
-  category: "HOUSE" | "PLOT" | "COMMERCIAL" | "APARTMENT";
+  category: "HOUSE" | "PLOT" | "COMMERCIAL" | "APARTMENT" | "OTHER";
   status: "FOR SALE" | "FOR RENT" | "SOLD";
   price: string;
   beds?: number;

@@ -23,11 +23,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
-      # Temporary: package-lock.json is missing several dependencies declared in package.json.
-      # Switch back to npm ci after regenerating and committing the lockfile.
+      # Temporary until package-lock.json is regenerated and verified against package.json.
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 

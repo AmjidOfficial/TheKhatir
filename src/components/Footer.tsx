@@ -48,10 +48,14 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-luxe-foreground/95">
               <li><a href="/" className="hover:text-gold transition-colors">Home</a></li>
               <li><a href="/work" className="hover:text-gold transition-colors">Properties</a></li>
+              <li><a href="/developments" className="hover:text-gold transition-colors">Developments</a></li>
+              <li><a href="/events" className="hover:text-gold transition-colors">Events & Site Visits</a></li>
+              <li><a href="/guides" className="hover:text-gold transition-colors">Property Guides</a></li>
               <li><a href="/services" className="hover:text-gold transition-colors">Services</a></li>
               <li><a href="/about" className="hover:text-gold transition-colors">About</a></li>
               <li><a href="/blog" className="hover:text-gold transition-colors">Blog</a></li>
               <li><a href="/contact" className="hover:text-gold transition-colors">Contact</a></li>
+              <li><a href="/login" className="hover:text-gold transition-colors">Business Workspace</a></li>
               <li>
                 <a href={waLink()} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
                   WhatsApp Us

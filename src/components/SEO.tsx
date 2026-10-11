@@ -9,19 +9,32 @@ interface SEOProps {
   type?: "website" | "article";
   image?: string;
   jsonLd?: Record<string, unknown>;
+  robots?: string;
+  canonicalUrl?: string;
 }
 
-const SEO = ({ title, description, path, type = "website", image, jsonLd }: SEOProps) => {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(normalizedPath, SITE_URL).toString();
-  const absoluteImage = image ? new URL(image, SITE_URL).toString() : undefined;
+const SEO = ({ title, description, path, type = "website", image, jsonLd, robots, canonicalUrl }: SEOProps) => {
+  const normalizedPath = path.startsWith("/") ? path : "/" + path;
+  const safeHttpUrl = (value?: string) => {
+    if (!value) return undefined;
+    try {
+      const parsed = new URL(value, SITE_URL);
+      return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.toString() : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+  const url = safeHttpUrl(normalizedPath) ?? SITE_URL;
+  const absoluteImage = safeHttpUrl(image);
+  const canonical = safeHttpUrl(canonicalUrl) ?? url;
+  const robotsContent = robots ? robots.replaceAll(",", ", ") : "index, follow, max-image-preview:large";
 
   return (
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="robots" content="index, follow, max-image-preview:large" />
-      <link rel="canonical" href={url} />
+      <meta name="robots" content={robotsContent} />
+      <link rel="canonical" href={canonical} />
       <meta property="og:site_name" content="Khatir Real Estate & Builders" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
