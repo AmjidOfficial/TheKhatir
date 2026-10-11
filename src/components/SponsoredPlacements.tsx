@@ -15,11 +15,11 @@ type Placement = {
   creative: unknown;
 };
 
-type Props = { placementTypes: string[]; title?: string };
+type Props = { placementTypes: string[]; title?: string; currentLocation?: string };
 
 const textValue = (value: unknown) => typeof value === "string" ? value : "";
 
-const SponsoredPlacements = ({ placementTypes, title = "Featured partners" }: Props) => {
+const SponsoredPlacements = ({ placementTypes, title = "Featured partners", currentLocation }: Props) => {
   const placementTypeKey = placementTypes.join(",");
   const [placements, setPlacements] = useState<Placement[]>([]);
 
@@ -33,7 +33,7 @@ const SponsoredPlacements = ({ placementTypes, title = "Featured partners" }: Pr
       try {
         const client = getSupabaseClient() as unknown as SupabaseClient;
         const { data, error } = await client.from("marketplace_ad_placements")
-          .select("id,product_type,advertiser_name,advertiser_slug,destination_url,property_id,project_id,event_id,creative")
+          .select("id,product_type,advertiser_name,advertiser_slug,destination_url,property_id,project_id,event_id,target_locations,creative")
           .in("product_type", placementTypeKey.split(","))
           .limit(4);
         if (error) throw error;
@@ -55,7 +55,7 @@ const SponsoredPlacements = ({ placementTypes, title = "Featured partners" }: Pr
         <span className="hidden items-center gap-1 text-xs text-muted-foreground sm:inline-flex"><Megaphone className="h-4 w-4" /> Paid placements</span>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {placements.map((placement) => {
+        {visiblePlacements.map((placement) => {
           const creative = (placement.creative && typeof placement.creative === "object" ? placement.creative : {}) as Record<string, unknown>;
           const adTitle = textValue(creative.title) || "Featured property partner";
           const description = textValue(creative.description);
