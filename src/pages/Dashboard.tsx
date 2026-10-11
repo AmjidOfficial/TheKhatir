@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { COMPANY } from "@/lib/company";
 import logo from "@/assets/khatir-logo.png";
 
@@ -91,7 +92,7 @@ const Dashboard = () => {
     if (showSpinner) setLoading(true);
     setBackendError("");
     try {
-      const client = getSupabaseClient() as any;
+      const client = getSupabaseClient() as unknown as SupabaseClient;
       const { data: authData, error: authError } = await client.auth.getUser();
       if (authError || !authData?.user) {
         navigate("/login?next=/dashboard", { replace: true });
@@ -126,7 +127,7 @@ const Dashboard = () => {
           .select("id, name, slug, business_type, status")
           .order("name");
         if (tenantsError) throw new Error("Platform admin workspace access could not be loaded.");
-        workspaceList = (allTenants ?? []).map((tenant: any) => ({
+        workspaceList = (allTenants ?? []).map((tenant) => ({
           ...tenant,
           role: profile.platform_role,
         }));
@@ -138,9 +139,9 @@ const Dashboard = () => {
           .in("id", ids)
           .order("name");
         if (tenantsError) throw new Error("Your business workspaces could not be loaded.");
-        workspaceList = (tenantRows ?? []).map((tenant: any) => ({
+        workspaceList = (tenantRows ?? []).map((tenant) => ({
           ...tenant,
-          role: membershipList.find((membership: any) => membership.tenant_id === tenant.id)?.role ?? "user",
+          role: membershipList.find((membership) => membership.tenant_id === tenant.id)?.role ?? "user",
         }));
       }
 
@@ -190,7 +191,7 @@ const Dashboard = () => {
 
     setCreatingWorkspace(true);
     try {
-      const client = getSupabaseClient() as any;
+      const client = getSupabaseClient() as unknown as SupabaseClient;
       const { data: authData, error: authError } = await client.auth.getUser();
       if (authError || !authData?.user) {
         navigate("/login?next=/dashboard", { replace: true });
