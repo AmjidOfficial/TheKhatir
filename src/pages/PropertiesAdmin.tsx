@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 type Workspace = { id: string; name: string; role: string; status: string };
 type PropertyRow = {
@@ -282,11 +283,12 @@ const PropertiesAdmin = () => {
   };
 
   if (loading) {
-    return <main className="flex min-h-screen items-center justify-center gap-3 bg-background text-muted-foreground"><LoaderCircle className="h-5 w-5 animate-spin" /> Loading property inventory…</main>;
+    return <main className="flex min-h-screen items-center justify-center gap-3 bg-background text-muted-foreground"><SEO title="Property inventory | Khatir Workspace" description="Private property operations." path="/dashboard/properties" robots="noindex,nofollow" /><LoaderCircle className="h-5 w-5 animate-spin" /> Loading property inventory…</main>;
   }
 
   return (
     <main className="min-h-screen bg-muted/30">
+      <SEO title="Property inventory | Khatir Workspace" description="Private property operations." path="/dashboard/properties" robots="noindex,nofollow" />
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" /> Workspace dashboard</Link>
