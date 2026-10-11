@@ -12,6 +12,7 @@ type Placement = {
   property_id: string | null;
   project_id: string | null;
   event_id: string | null;
+  target_locations: string[] | null;
   creative: unknown;
 };
 
