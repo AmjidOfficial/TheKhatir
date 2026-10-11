@@ -150,6 +150,25 @@ begin
     return new;
   end if;
 
+  if tg_op = 'INSERT' then
+    if tg_table_name = 'properties'
+       and (new.verification_status <> 'unverified' or new.verified_by is not null
+         or new.verified_at is not null or new.publication_status = 'published') then
+      raise exception 'New properties must enter the verification workflow as drafts';
+    elsif tg_table_name = 'projects'
+       and (new.approval_status <> 'not_verified' or new.publication_status = 'published') then
+      raise exception 'New projects must enter the approval workflow as drafts';
+    elsif tg_table_name = 'ad_campaigns'
+       and (new.moderation_status <> 'pending_review' or new.status = 'active') then
+      raise exception 'New advertising campaigns require review before activation';
+    elsif tg_table_name = 'events' and new.publication_status = 'published' then
+      raise exception 'New events require platform review before publication';
+    elsif tg_table_name = 'content_pages' and new.publication_status = 'published' then
+      raise exception 'New content requires platform review before publication';
+    end if;
+    return new;
+  end if;
+
   if tg_table_name = 'tenants' then
     if new.status is distinct from old.status or new.is_public is distinct from old.is_public then
       raise exception 'Only platform administrators may activate, suspend, or publish a business';
@@ -188,11 +207,11 @@ begin
       raise exception 'A campaign must be approved and its business active before activation';
     end if;
   elsif tg_table_name = 'events' then
-    if new.publication_status = 'published' then
+    if new.publication_status = 'published' and old.publication_status is distinct from 'published' then
       raise exception 'Events require platform review before publication';
     end if;
   elsif tg_table_name = 'content_pages' then
-    if new.publication_status = 'published' then
+    if new.publication_status = 'published' and old.publication_status is distinct from 'published' then
       raise exception 'Content requires platform review before publication';
     end if;
   end if;
@@ -521,24 +540,37 @@ returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $$
+as $
 begin
-  if auth.uid() is not null and not public.is_platform_admin() then
-    if tg_op = 'INSERT' then
-      if new.user_id <> auth.uid() or new.role <> 'owner' then
-        raise exception 'Only platform admins may assign roles to other users';
+  if auth.uid() is null or public.is_platform_admin() then
+    return new;
+  end if;
+
+  if tg_op = 'INSERT' then
+    -- The tenant-creation trigger may create the first owner membership.
+    if new.user_id = auth.uid() and new.role = 'owner' then
+      return new;
+    end if;
+    if not public.can_manage_tenant(new.tenant_id) then
+      raise exception 'Only tenant managers may invite team members';
+    end if;
+    if new.role = 'owner' then
+      raise exception 'Only platform administrators may assign an additional owner';
+    end if;
+  elsif tg_op = 'UPDATE' then
+    if new.tenant_id is distinct from old.tenant_id or new.user_id is distinct from old.user_id then
+      raise exception 'Memberships cannot be moved to another tenant or user';
+    end if;
+    if new.role is distinct from old.role then
+      if not public.can_manage_tenant(old.tenant_id) or new.role = 'owner' then
+        raise exception 'Insufficient permission to change this membership role';
       end if;
-    elsif tg_op = 'UPDATE' and (
-      new.role is distinct from old.role
-      or new.user_id is distinct from old.user_id
-      or new.tenant_id is distinct from old.tenant_id
-    ) then
-      raise exception 'Only platform admins may change membership identity or role';
     end if;
   end if;
+
   return new;
 end;
-$$;
+$;
 
 drop trigger if exists prevent_membership_privilege_escalation on public.tenant_memberships;
 create trigger prevent_membership_privilege_escalation
@@ -610,27 +642,27 @@ for each row execute procedure public.guard_tenant_moderation_fields();
 
 drop trigger if exists guard_property_moderation on public.properties;
 create trigger guard_property_moderation
-before update on public.properties
+before insert or update on public.properties
 for each row execute procedure public.guard_tenant_moderation_fields();
 
 drop trigger if exists guard_project_moderation on public.projects;
 create trigger guard_project_moderation
-before update on public.projects
+before insert or update on public.projects
 for each row execute procedure public.guard_tenant_moderation_fields();
 
 drop trigger if exists guard_campaign_moderation on public.ad_campaigns;
 create trigger guard_campaign_moderation
-before update on public.ad_campaigns
+before insert or update on public.ad_campaigns
 for each row execute procedure public.guard_tenant_moderation_fields();
 
 drop trigger if exists guard_event_moderation on public.events;
 create trigger guard_event_moderation
-before update on public.events
+before insert or update on public.events
 for each row execute procedure public.guard_tenant_moderation_fields();
 
 drop trigger if exists guard_content_moderation on public.content_pages;
 create trigger guard_content_moderation
-before update on public.content_pages
+before insert or update on public.content_pages
 for each row execute procedure public.guard_tenant_moderation_fields();
 
 do $
@@ -740,7 +772,8 @@ create policy "memberships_create_owner_self_or_manager" on public.tenant_member
 for insert to authenticated
 with check (
   public.is_platform_admin()
-  or (user_id = auth.uid() and role = 'owner' and status = 'active' and public.can_manage_tenant(tenant_id))
+  or public.can_manage_tenant(tenant_id)
+  or (user_id = auth.uid() and role = 'owner' and status = 'active')
 );
 
 drop policy if exists "memberships_update_manager" on public.tenant_memberships;
@@ -758,7 +791,8 @@ drop policy if exists "properties_read_published_or_tenant" on public.properties
 create policy "properties_read_published_or_tenant" on public.properties
 for select
 using (
-  (publication_status = 'published' and verification_status = 'verified')
+  (publication_status = 'published' and verification_status = 'verified'
+    and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
   or public.is_tenant_member(tenant_id)
   or public.is_platform_admin()
 );
@@ -783,7 +817,8 @@ drop policy if exists "projects_read_published_or_tenant" on public.projects;
 create policy "projects_read_published_or_tenant" on public.projects
 for select
 using (
-  (publication_status = 'published' and approval_status = 'verified')
+  (publication_status = 'published' and approval_status = 'verified'
+    and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
   or public.is_tenant_member(tenant_id)
   or public.is_platform_admin()
 );
@@ -893,7 +928,11 @@ using (public.can_manage_tenant(tenant_id) or public.is_platform_admin());
 drop policy if exists "events_read_public_or_tenant" on public.events;
 create policy "events_read_public_or_tenant" on public.events
 for select
-using (publication_status = 'published' or public.is_tenant_member(tenant_id) or public.is_platform_admin());
+using (
+  (publication_status = 'published' and exists (select 1 from public.tenants t where t.id = tenant_id and t.status = 'active'))
+  or public.is_tenant_member(tenant_id)
+  or public.is_platform_admin()
+);
 
 drop policy if exists "events_create_editor" on public.events;
 create policy "events_create_editor" on public.events
