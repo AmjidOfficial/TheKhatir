@@ -173,46 +173,154 @@ begin
     if new.status is distinct from old.status or new.is_public is distinct from old.is_public then
       raise exception 'Only platform administrators may activate, suspend, or publish a business';
     end if;
+
   elsif tg_table_name = 'properties' then
     if new.verification_status is distinct from old.verification_status
        or new.verified_by is distinct from old.verified_by
        or new.verified_at is distinct from old.verified_at then
       raise exception 'Only platform administrators may change property verification';
     end if;
+
+    if old.verification_status = 'verified' and (
+      new.title is distinct from old.title
+      or new.description is distinct from old.description
+      or new.listing_type is distinct from old.listing_type
+      or new.intent is distinct from old.intent
+      or new.price is distinct from old.price
+      or new.currency is distinct from old.currency
+      or new.price_period is distinct from old.price_period
+      or new.area_value is distinct from old.area_value
+      or new.area_unit is distinct from old.area_unit
+      or new.bedrooms is distinct from old.bedrooms
+      or new.bathrooms is distinct from old.bathrooms
+      or new.city is distinct from old.city
+      or new.locality is distinct from old.locality
+      or new.society is distinct from old.society
+      or new.block_sector is distinct from old.block_sector
+      or new.address is distinct from old.address
+      or new.amenities is distinct from old.amenities
+      or new.media is distinct from old.media
+      or new.expires_at is distinct from old.expires_at
+    ) then
+      new.verification_status := 'pending';
+      new.verified_by := null;
+      new.verified_at := null;
+      if new.publication_status = 'published' then
+        new.publication_status := 'pending_review';
+      end if;
+    end if;
+
     if new.publication_status = 'published'
        and (new.verification_status <> 'verified'
-         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
-      raise exception 'A property must be verified and its business active before publication';
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active' and t.is_public = true)) then
+      raise exception 'A property must be verified and its business active/public before publication';
     end if;
+
   elsif tg_table_name = 'projects' then
     if new.approval_status is distinct from old.approval_status
        or new.approval_reference is distinct from old.approval_reference
        or new.approval_checked_at is distinct from old.approval_checked_at then
       raise exception 'Only platform administrators may change project approval records';
     end if;
+
+    if old.approval_status = 'verified' and (
+      new.title is distinct from old.title
+      or new.project_type is distinct from old.project_type
+      or new.summary is distinct from old.summary
+      or new.description is distinct from old.description
+      or new.city is distinct from old.city
+      or new.locality is distinct from old.locality
+      or new.address is distinct from old.address
+      or new.amenities is distinct from old.amenities
+      or new.media is distinct from old.media
+      or new.brochure_url is distinct from old.brochure_url
+      or new.payment_plan_url is distinct from old.payment_plan_url
+    ) then
+      new.approval_status := 'under_review';
+      new.approval_reference := null;
+      new.approval_checked_at := null;
+      if new.publication_status = 'published' then
+        new.publication_status := 'pending_review';
+      end if;
+    end if;
+
     if new.publication_status = 'published'
        and (new.approval_status <> 'verified'
-         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
-      raise exception 'A project must have verified approval status and an active business before publication';
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active' and t.is_public = true)) then
+      raise exception 'A project must have verified approval status and an active/public business before publication';
     end if;
+
   elsif tg_table_name = 'ad_campaigns' then
     if new.moderation_status is distinct from old.moderation_status
        or new.approved_by is distinct from old.approved_by
        or new.approved_at is distinct from old.approved_at then
       raise exception 'Only platform administrators may approve or reject advertising campaigns';
     end if;
+
+    if old.moderation_status = 'approved' and (
+      new.name is distinct from old.name
+      or new.product_type is distinct from old.product_type
+      or new.property_id is distinct from old.property_id
+      or new.project_id is distinct from old.project_id
+      or new.event_id is distinct from old.event_id
+      or new.destination_url is distinct from old.destination_url
+      or new.creative is distinct from old.creative
+      or new.target_locations is distinct from old.target_locations
+      or new.budget is distinct from old.budget
+      or new.currency is distinct from old.currency
+      or new.starts_at is distinct from old.starts_at
+      or new.ends_at is distinct from old.ends_at
+    ) then
+      new.moderation_status := 'pending_review';
+      new.approved_by := null;
+      new.approved_at := null;
+      if new.status = 'active' then
+        new.status := 'paused';
+      end if;
+    end if;
+
     if new.status = 'active'
        and (new.moderation_status <> 'approved'
-         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active')) then
-      raise exception 'A campaign must be approved and its business active before activation';
+         or not exists (select 1 from public.tenants t where t.id = new.tenant_id and t.status = 'active' and t.is_public = true)) then
+      raise exception 'A campaign must be approved and its business active/public before activation';
     end if;
+
   elsif tg_table_name = 'events' then
     if new.publication_status = 'published' and old.publication_status is distinct from 'published' then
       raise exception 'Events require platform review before publication';
     end if;
+    if old.publication_status = 'published' and (
+      new.title is distinct from old.title
+      or new.event_type is distinct from old.event_type
+      or new.description is distinct from old.description
+      or new.starts_at is distinct from old.starts_at
+      or new.ends_at is distinct from old.ends_at
+      or new.venue is distinct from old.venue
+      or new.online_url is distinct from old.online_url
+      or new.cover_image_url is distinct from old.cover_image_url
+      or new.capacity is distinct from old.capacity
+    ) and new.publication_status = 'published' then
+      new.publication_status := 'pending_review';
+    end if;
+
   elsif tg_table_name = 'content_pages' then
     if new.publication_status = 'published' and old.publication_status is distinct from 'published' then
       raise exception 'Content requires platform review before publication';
+    end if;
+    if old.publication_status = 'published' and (
+      new.title is distinct from old.title
+      or new.slug is distinct from old.slug
+      or new.content_type is distinct from old.content_type
+      or new.excerpt is distinct from old.excerpt
+      or new.body is distinct from old.body
+      or new.meta_title is distinct from old.meta_title
+      or new.meta_description is distinct from old.meta_description
+      or new.canonical_url is distinct from old.canonical_url
+      or new.social_image_url is distinct from old.social_image_url
+      or new.robots_directive is distinct from old.robots_directive
+    ) then
+      new.publication_status := 'pending_review';
+      new.published_at := null;
     end if;
   end if;
 
