@@ -87,7 +87,7 @@ const PublicDirectory = () => {
           <h1 className="mt-3 text-4xl font-light text-primary md:text-6xl">{section.title}</h1>
           <p className="mt-4 max-w-3xl leading-7 text-muted-foreground">{section.description}</p>
 
-          <SponsoredPlacements placementTypes={sectionKey === "events" ? ["event_promotion"] : sectionKey === "developments" ? ["promoted_project", "area_placement"] : ["sponsored_content"]} title="Sponsored partners" />
+          <SponsoredPlacements placementTypes={sectionKey === "events" ? ["event_promotion"] : sectionKey === "developments" ? ["promoted_project", "area_placement"] : ["sponsored_content"]} title="Sponsored partners" currentLocation="Peshawar" />
 
           {!isSupabaseConfigured && <div role="status" className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">Live publishing is not connected in this deployment yet. No sample events, projects or articles are shown as real content.</div>}
           {error && <div role="alert" className="mt-8 flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0" />{error}</div>}
