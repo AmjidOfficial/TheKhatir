@@ -223,7 +223,7 @@ const PropertiesAdmin = () => {
       const payload = {
         reference_code: form.reference_code.trim(),
         title: form.title.trim(),
-        slug: slugify(form.title),
+        slug: slugify(form.title) || slugify(form.reference_code) || ("listing-" + Date.now().toString(36)),
         description: form.description.trim(),
         listing_type: form.listing_type,
         intent: form.intent,
