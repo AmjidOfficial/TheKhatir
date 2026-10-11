@@ -16,7 +16,7 @@ const SocialLinks = ({ className = "", iconClassName = "h-5 w-5" }: Props) => {
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      {links.map(({ href, label, Icon }) => (
+      {links.filter(({ href }) => href && /^https:\/\//i.test(href)).map(({ href, label, Icon }) => (
         <a
           key={label}
           href={href}
