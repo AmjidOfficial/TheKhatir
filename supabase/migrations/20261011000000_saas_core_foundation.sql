@@ -853,7 +853,7 @@ create trigger guard_content_moderation
 before insert or update on public.content_pages
 for each row execute procedure public.guard_tenant_moderation_fields();
 
-do $
+do $$
 declare
   t text;
 begin
