@@ -38,7 +38,7 @@ Public pages should query these allow-listed views rather than select full base-
 - `marketplace_content`
 - `marketplace_ad_placements`
 
-The views omit private assignment, moderation, and billing fields. Keep their filters restrictive and add automated tests before adding more columns.
+The views use PostgreSQL `security_invoker = true` so underlying RLS rules still apply, and they omit private assignment, moderation, and billing fields. Anonymous access is granted only to the columns needed by those views. Keep their filters restrictive and add automated tests before adding more columns.
 
 ## Still required before production
 
@@ -51,4 +51,4 @@ The views omit private assignment, moderation, and billing fields. Keep their fi
 - Automated RLS integration tests, build/lint, accessibility, mobile, and performance checks
 - Backup/restore test, error monitoring, deployment environment verification, and privacy/legal review
 
-A schema file in GitHub is not the same as a deployed or tested backend. Mark features complete only after the migration is applied to the correct project and end-to-end tests pass.
+A schema file in GitHub is not the same as a deployed or tested backend. The dashboard/login UI now has a real Supabase auth path and refuses to show fake accounts or metrics, but it remains unavailable until the approved project is configured and the schema is applied. Mark features complete only after the migration is applied to the correct project and end-to-end tests pass.
