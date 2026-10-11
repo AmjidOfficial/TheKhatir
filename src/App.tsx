@@ -19,6 +19,7 @@ import LeadsAdmin from "./pages/LeadsAdmin";
 import BusinessOpsAdmin from "./pages/BusinessOpsAdmin";
 import PublicDirectory from "./pages/PublicDirectory";
 import ContentDetail from "./pages/ContentDetail";
+import PlatformAdmin from "./pages/PlatformAdmin";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/properties" element={<PropertiesAdmin />} />
           <Route path="/dashboard/leads" element={<LeadsAdmin />} />
+          <Route path="/dashboard/admin" element={<PlatformAdmin />} />
           <Route path="/dashboard/:module" element={<BusinessOpsAdmin />} />
           <Route path="/events" element={<PublicDirectory />} />
           <Route path="/developments" element={<PublicDirectory />} />
