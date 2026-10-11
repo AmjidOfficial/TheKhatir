@@ -128,7 +128,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 begin
   if auth.uid() is not null
      and not public.is_platform_admin()
@@ -137,14 +137,14 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 create or replace function public.guard_tenant_moderation_fields()
 returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 begin
   if auth.uid() is null or public.is_platform_admin() then
     return new;
@@ -218,7 +218,7 @@ begin
 
   return new;
 end;
-$;
+$$;
 
 create or replace function public.prevent_self_platform_role_change()
 returns trigger
@@ -511,7 +511,7 @@ create or replace function public.validate_tenant_relationships()
 returns trigger
 language plpgsql
 set search_path = public
-as $
+as $$
 begin
   if tg_table_name = 'leads' then
     if new.property_id is not null and not exists (
@@ -563,7 +563,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists validate_lead_tenant_relations on public.leads;
 create trigger validate_lead_tenant_relations before insert or update on public.leads
@@ -620,7 +620,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 begin
   if auth.uid() is null or public.is_platform_admin() then
     return new;
@@ -650,7 +650,7 @@ begin
 
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists prevent_membership_privilege_escalation on public.tenant_memberships;
 create trigger prevent_membership_privilege_escalation
@@ -757,7 +757,7 @@ begin
     execute format('create trigger prevent_tenant_id_change before update on public.%I for each row execute procedure public.prevent_tenant_id_change()', t);
   end loop;
 end;
-$;
+$$;
 
 drop trigger if exists prevent_profile_role_change on public.user_profiles;
 create trigger prevent_profile_role_change
