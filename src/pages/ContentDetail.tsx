@@ -60,7 +60,7 @@ const ContentDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={(content?.meta_title || content?.title || "Property guide") + " | Khatir"} description={content?.meta_description || content?.excerpt || "Property and development insights from Khatir."} path={"/guides/" + (slug ?? "")} image={content?.social_image_url || undefined} robots={content?.robots_directive} canonicalUrl={content?.canonical_url || undefined} type="article" />
+      <SEO title={(content?.meta_title || content?.title || "Property guide") + " | Khatir"} description={content?.meta_description || content?.excerpt || "Property and development insights from Khatir."} path={"/guides/" + (slug ?? "")} image={content?.social_image_url || undefined} robots={content?.robots_directive || "noindex,nofollow"} canonicalUrl={content?.canonical_url || undefined} type="article" />
       <Navigation />
       <main className="container mx-auto max-w-5xl px-6 pb-24 pt-32 md:pt-36">
         <Link to="/guides" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" /> All guides</Link>
