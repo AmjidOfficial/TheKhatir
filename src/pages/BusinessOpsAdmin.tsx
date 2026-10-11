@@ -63,6 +63,7 @@ const configs: Record<string, ModuleConfig> = {
     fields: [
       { key: "name", label: "Campaign name", type: "text", required: true, maxLength: 180 },
       { key: "product_type", label: "Placement type", type: "select", required: true, options: options(["featured_property","promoted_project","promoted_business","sponsored_search","homepage_placement","area_placement","sponsored_content","event_promotion"]) },
+      { key: "target_locations_text", label: "Target locations (comma separated)", type: "text", maxLength: 1000, placeholder: "Peshawar, Hayatabad, DHA Peshawar" },
       { key: "destination_url", label: "Destination URL", type: "url", maxLength: 2000 },
       { key: "budget", label: "Budget (PKR)", type: "number" },
       { key: "starts_at", label: "Campaign start", type: "datetime-local" },
@@ -194,7 +195,7 @@ const BusinessOpsAdmin = () => {
     const initial: Record<string, string> = {};
     const creative = (row.creative && typeof row.creative === "object" ? row.creative : {}) as Record<string, unknown>;
     config.fields.forEach((field) => {
-      const value = field.key.startsWith("creative_") ? creative[field.key.replace("creative_", "")] : row[field.key];
+      const value = field.key.startsWith("creative_") ? creative[field.key.replace("creative_", "")] : field.key === "target_locations_text" ? (Array.isArray(row.target_locations) ? row.target_locations.join(", ") : "") : row[field.key];
       initial[field.key] = field.type === "datetime-local" ? toLocalDateTime(value) : value === null || value === undefined ? "" : String(value);
     });
     setForm(initial);
