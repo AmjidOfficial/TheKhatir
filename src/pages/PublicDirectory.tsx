@@ -78,7 +78,7 @@ const PublicDirectory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={section.title + " | Khatir"} description={section.description} path={section.path} />
+      <SEO title={section.title + " | Khatir"} description={section.description} path={section.path} robots={!isSupabaseConfigured || rows.length === 0 ? "noindex,follow" : undefined} />
       <Navigation />
       <main className="container mx-auto px-6 pb-24 pt-32 md:pt-36">
         <div className="mx-auto max-w-7xl">
