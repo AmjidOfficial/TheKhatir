@@ -1,18 +1,17 @@
 # Khatir Real Estate & Builders
 
-> Property and construction guidance in Peshawar, including houses, plots, apartments, commercial property, consultancy and turn-key construction.
+> Khatir is a Peshawar-focused property, development and construction business website. The Khatir SaaS workspace is in development.
 
-## Pages
+## Main pages
+- [Home](/): Khatir overview and services.
+- [Property search](/work): Browse the property collection. Listings marked “SAMPLE ONLY” are illustrative examples, not verified inventory.
+- [Services](/services): Property consultancy, construction and development services.
+- [Blog](/blog): Property, design and development articles.
+- [Contact](/contact): Contact Khatir to confirm current information.
+- [Business workspace sign-in](/login): Account access for the Khatir workspace.
 
-- [Home](/): Overview of Khatir Real Estate & Builders and featured properties.
-- [Properties](/work): Explore property examples and contact Khatir to confirm current availability, price and documents.
-- [Services](/services): Consultancy, construction and project development.
-- [About](/about): Company background, founded 2005 in Peshawar.
-- [Contact](/contact): Office address and phone contacts.
-- [Blog](/blog): Insights on architecture, design and urban planning.
-
-## Optional
-
-- [Sustainable Architecture](/blog/sustainable-architecture-future)
-- [Minimalism in Modern Living](/blog/minimalism-modern-living)
-- [Urban Planning](/blog/urban-planning-community-spaces)
+## Important information
+- Do not treat sample property titles, prices or availability as live offers.
+- Confirm property ownership, approvals, price, availability and transaction documents independently before making a decision.
+- Sponsored placements, when enabled, should be clearly labelled as advertising.
+- Only public pages should be indexed. Private dashboards and customer records must not be exposed to search crawlers.
