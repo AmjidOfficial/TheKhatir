@@ -18,7 +18,7 @@ const sections: Record<string, Section> = {
   events: {
     table: "marketplace_events", title: "Events & site visits", eyebrow: "KHATIR EVENTS",
     description: "Discover approved property launches, open houses, investor sessions and construction site visits.",
-    path: "/events", select: "id,title,slug,event_type,description,starts_at,ends_at,timezone,venue,cover_image_url,capacity",
+    path: "/events", select: "id,title,slug,event_type,description,starts_at,ends_at,timezone,venue,capacity",
     icon: CalendarDays, emptyTitle: "No public events yet", emptyDescription: "Check back soon or contact Khatir to ask about upcoming launches and site visits.",
   },
   developments: {
