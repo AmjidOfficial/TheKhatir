@@ -853,7 +853,6 @@ for insert to authenticated
 with check (
   public.is_platform_admin()
   or public.can_manage_tenant(tenant_id)
-  or (user_id = auth.uid() and role = 'owner' and status = 'active')
 );
 
 drop policy if exists "memberships_update_manager" on public.tenant_memberships;
