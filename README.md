@@ -1,73 +1,52 @@
-# Welcome to your Lovable project
+# Khatir Real Estate & Builders
 
-## Project info
+The production codebase for the Khatir property and development platform.
 
-**URL**: https://lovable.dev/projects/09a14ae7-bd4a-415b-b22e-66bbeb1a9240
+**Primary website:** https://khatir.netlify.app  
+**Primary repository:** https://github.com/AmjidOfficial/TheKhatir  
+**Business focus:** Peshawar, Khyber Pakhtunkhwa, Pakistan
 
-## How can I edit this code?
+## Product vision
 
-There are several ways of editing your application.
+Build a trusted, mobile-first property platform for buying, selling, renting, property consultancy, construction, and development projects. The experience should combine the ease of a property search portal with the local knowledge and personal service of Khatir.
 
-**Use Lovable**
+## Current technology
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/09a14ae7-bd4a-415b-b22e-66bbeb1a9240) and start prompting.
+- React 18, TypeScript, and Vite
+- Tailwind CSS and shadcn/ui
+- React Router
+- Supabase client package is present; production database integration and policies still require verification
+- Netlify deployment with SPA redirects
 
-Changes made via Lovable will be committed automatically to this repo.
+## Run locally
 
-**Use your preferred IDE**
+Requirements: a supported Node.js LTS release and npm.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Set the public Supabase project URL and publishable/anon key in `.env.local` only if the relevant Supabase project is configured. Never put a Supabase service-role key or other server secret in a `VITE_*` variable.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Available scripts
 
-**Use GitHub Codespaces**
+- `npm run dev` — local development
+- `npm run build` — production build
+- `npm run lint` — lint checks
+- `npm run preview` — preview the built app
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Production principles
 
-## What technologies are used for this project?
+1. Do not publish invented properties, prices, client counts, returns, approvals, or availability as facts.
+2. Clearly label demo/sample content and replace it with approved, current inventory before launch.
+3. Confirm ownership, authority approvals, listing status, price, and last-updated date with the responsible team.
+4. Treat enquiries and customer data as private. Enforce access in the database, not only in the UI.
+5. Keep credentials out of Git. Use environment variables and platform secret settings.
+6. Test mobile layouts, keyboard navigation, forms, page refresh/deep links, and error states before release.
+7. Keep this repository as the single source of truth. Review changes in branches/PRs and verify the production build before deploying.
 
-This project is built with:
+## Project plan
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/09a14ae7-bd4a-415b-b22e-66bbeb1a9240) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+See [docs/PROJECT_AUDIT_AND_ROADMAP.md](docs/PROJECT_AUDIT_AND_ROADMAP.md) for the current audit findings, launch blockers, and phased delivery plan.
