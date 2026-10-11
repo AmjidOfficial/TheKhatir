@@ -19,13 +19,13 @@ export const COMPANY = {
     defaultMessage:
       "Assalam-o-Alaikum! I'm interested in Khatir Real Estate & Builders. Please share more details.",
   },
-  // Social links (placeholders — update via Visual Edits)
+  // Only publish social profiles that the business has confirmed. Empty values are hidden.
   social: {
-    facebook: "https://facebook.com/",
-    instagram: "https://instagram.com/",
-    youtube: "https://youtube.com/",
-    tiktok: "https://tiktok.com/",
-    linkedin: "https://linkedin.com/",
+    facebook: "https://www.facebook.com/KhaterPropertyConsultantBuilders",
+    instagram: "",
+    youtube: "",
+    tiktok: "",
+    linkedin: "",
   },
 };
 
