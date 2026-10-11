@@ -14,7 +14,7 @@ const Index = () => {
     <div className="min-h-screen">
       <SEO
         title="Khatir Real Estate & Builders — Peshawar"
-        description="Trusted property dealers and builders in Peshawar. Verified houses, plots and commercial properties — consultancy, construction and projects."
+        description="Property consultancy, development and construction services in Peshawar. Browse property information and contact Khatir to confirm availability, approvals and documents."
         path="/"
       />
       <Navigation />
