@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /login
+Disallow: /dashboard
+Disallow: /dashboard/
 
 Sitemap: https://khatir.netlify.app/sitemap.xml
