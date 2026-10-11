@@ -19,7 +19,7 @@ const Index = () => {
       />
       <Navigation />
       <Hero />
-      <SponsoredPlacements placementTypes={["homepage_placement", "promoted_business"]} title="Featured partners" />
+      <SponsoredPlacements placementTypes={["homepage_placement", "promoted_business"]} title="Featured partners" currentLocation="Peshawar" />
       <Services />
       <About />
       <Portfolio />
