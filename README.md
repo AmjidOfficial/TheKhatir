@@ -49,4 +49,4 @@ Set the public Supabase project URL and publishable/anon key in `.env.local` onl
 
 ## Project plan
 
-See [docs/PROJECT_AUDIT_AND_ROADMAP.md](docs/PROJECT_AUDIT_AND_ROADMAP.md) for the current audit findings, launch blockers, and phased delivery plan.
+See [docs/PROJECT_AUDIT_AND_ROADMAP.md](docs/PROJECT_AUDIT_AND_ROADMAP.md) for the audit findings and launch blockers. See [docs/SAAS_PRODUCT_BLUEPRINT.md](docs/SAAS_PRODUCT_BLUEPRINT.md) for the target multi-tenant SaaS scope, roles, CRM, advertising, events, developer/builders workspace, security requirements, and release gates.
