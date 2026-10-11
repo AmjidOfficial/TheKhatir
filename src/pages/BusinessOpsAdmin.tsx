@@ -244,7 +244,7 @@ const BusinessOpsAdmin = () => {
       });
       if (module === "ads") payload.creative = creative;
       const titleValue = String(payload.title ?? payload.name ?? "");
-      if (payload.title !== undefined) payload.slug = slugify(titleValue);
+      if (payload.title !== undefined) {\n        const existingSlug = editingId ? String(rows.find((row) => String(row.id) === editingId)?.slug ?? "") : "";\n        payload.slug = slugify(titleValue) || existingSlug || (String(module) + "-" + Date.now().toString(36));\n      }
       if (!editingId) {
         payload.tenant_id = activeWorkspace.id;
         payload.created_by = authData.user.id;
@@ -319,7 +319,7 @@ const BusinessOpsAdmin = () => {
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{sortedRows.length === 0 ? <Card className="bg-background md:col-span-2 xl:col-span-3"><CardContent className="py-16 text-center"><Icon className="mx-auto h-8 w-8 text-muted-foreground" /><h2 className="mt-4 text-lg font-medium">Nothing here yet</h2><p className="mt-2 text-sm text-muted-foreground">Create the first draft when your workspace is ready.</p><Button className="mt-5" onClick={startCreate} disabled={!canCreate}><Plus className="h-4 w-4" /> Create new</Button></CardContent></Card> : sortedRows.map((row) => {
           const title = String(row.title ?? row.name ?? "Untitled");
-          const status = String(row.publication_status ?? row.status ?? row.moderation_status ?? "draft");
+          const status = module === "ads" ? String(row.status ?? "draft") + " · " + String(row.moderation_status ?? "pending_review") : String(row.publication_status ?? row.status ?? "draft");
           const subtitle = String(row.city ?? row.venue ?? row.product_type ?? row.content_type ?? row.event_type ?? row.project_type ?? "");
           const rowId = String(row.id ?? "");
           return <Card key={rowId} className="bg-background"><CardHeader className="pb-3"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><CardTitle className="line-clamp-2 text-base">{title}</CardTitle><CardDescription className="mt-1 capitalize">{subtitle.replaceAll("_"," ")}</CardDescription></div><span className="shrink-0 rounded-full border border-border px-2.5 py-1 text-xs capitalize">{status.replaceAll("_"," ")}</span></div></CardHeader><CardContent><p className="line-clamp-3 min-h-12 text-sm leading-6 text-muted-foreground">{String(row.summary ?? row.excerpt ?? row.description ?? "")}</p><div className="mt-4 flex flex-wrap gap-2"><Button variant="outline" size="sm" onClick={() => startEdit(row)} disabled={!canCreate}>Edit</Button>{config.reviewable && status === "draft" && <Button variant="secondary" size="sm" onClick={() => void updateWorkflow(row,"pending_review")} disabled={!canCreate}><Send className="h-4 w-4" /> Submit for review</Button>}{status !== config.archiveValue && <Button variant="ghost" size="sm" onClick={() => void updateWorkflow(row,config.archiveValue)} disabled={!canArchive}><Archive className="h-4 w-4" /> {config.archiveValue === "cancelled" ? "Cancel" : config.archiveValue === "paused" ? "Pause" : "Archive"}</Button>}</div><p className="mt-4 text-xs text-muted-foreground">Updated {row.updated_at ? new Date(String(row.updated_at)).toLocaleDateString() : row.created_at ? new Date(String(row.created_at)).toLocaleDateString() : "—"}</p></CardContent></Card>;
