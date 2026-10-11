@@ -20,8 +20,8 @@ Khatir is being built as a Peshawar-first real estate and property-development S
 - Project, event, advertising and SEO content workspaces
 - Role-aware navigation and tenant-scoped data access
 
-### SaaS administration (planned / gated)
-- Platform super-admin and business moderation
+### SaaS administration (partially implemented / gated)
+- Initial platform moderation centre for business workspaces, properties, projects, events, advertising and SEO content
 - Team invitations, role management and branch permissions
 - Media/document storage, notifications and audit review
 - Subscription plans, usage limits, invoices and payment integrations
