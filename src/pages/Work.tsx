@@ -75,6 +75,7 @@ const Work = () => {
         title="Properties for Sale & Rent in Peshawar | Khatir"
         description="Explore houses, plots, apartments and commercial property opportunities in Peshawar. Contact Khatir to confirm current availability, price and documents."
         path="/work"
+        robots={usingSamples || (isSupabaseConfigured && listingProperties.length === 0) ? "noindex,follow" : undefined}
       />
       <Navigation />
 
