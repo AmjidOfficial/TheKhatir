@@ -1,4 +1,5 @@
 import { MapPin, Bed, Bath, Maximize, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Property } from "@/data/properties";
 import { waLink } from "@/lib/company";
 
@@ -14,7 +15,12 @@ const PropertyCard = ({ property }: { property: Property }) => {
           loading="lazy"
           className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute top-4 left-4 flex gap-2">
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          {property.isSample && (
+            <span className="rounded bg-amber-100 px-3 py-1 text-xs font-semibold tracking-wider text-amber-950">
+              SAMPLE ONLY
+            </span>
+          )}
           <span className="bg-gold text-gold-foreground px-3 py-1 text-xs font-semibold tracking-wider rounded">
             {property.status}
           </span>
@@ -31,7 +37,12 @@ const PropertyCard = ({ property }: { property: Property }) => {
           {property.location}
         </p>
 
-        <p className="text-2xl font-light text-gold mb-4">{property.price}</p>
+        <p className="text-2xl font-light text-gold mb-2">{property.price}</p>
+        {property.isSample && (
+          <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
+            Illustrative example only. Price and availability have not been confirmed.
+          </p>
+        )}
 
         <div className="flex items-center gap-5 text-sm text-muted-foreground mb-4 pb-4 border-b border-border">
           {property.beds !== undefined && (
@@ -53,15 +64,23 @@ const PropertyCard = ({ property }: { property: Property }) => {
           {property.description}
         </p>
 
-        <a
-          href={waLink(message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 w-full bg-[#25D366] text-white px-4 py-2.5 rounded-md font-medium hover:bg-[#1ebe57] transition-colors"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Inquire on WhatsApp
-        </a>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <Link
+            to={`/property/${property.id}`}
+            className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+          >
+            View details
+          </Link>
+          <a
+            href={waLink(message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#25D366] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1ebe57] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
+          </a>
+        </div>
       </div>
     </article>
   );

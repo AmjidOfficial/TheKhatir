@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://khatirrealestate.lovable.app/sitemap.xml
+Sitemap: https://khatir.netlify.app/sitemap.xml
