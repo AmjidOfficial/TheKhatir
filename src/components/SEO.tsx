@@ -12,20 +12,27 @@ interface SEOProps {
 }
 
 const SEO = ({ title, description, path, type = "website", image, jsonLd }: SEOProps) => {
-  const url = `${SITE_URL}${path}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const url = new URL(normalizedPath, SITE_URL).toString();
+  const absoluteImage = image ? new URL(image, SITE_URL).toString() : undefined;
+
   return (
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
       <link rel="canonical" href={url} />
+      <meta property="og:site_name" content="Khatir Real Estate & Builders" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:type" content={type} />
+      <meta property="og:locale" content="en_PK" />
+      <meta name="twitter:card" content={absoluteImage ? "summary_large_image" : "summary"} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      {image && <meta property="og:image" content={image} />}
-      {image && <meta name="twitter:image" content={image} />}
+      {absoluteImage && <meta property="og:image" content={absoluteImage} />}
+      {absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
       {jsonLd && (
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       )}
