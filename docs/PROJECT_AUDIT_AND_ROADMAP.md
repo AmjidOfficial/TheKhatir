@@ -23,7 +23,7 @@
 7. Listing details must distinguish verified live inventory from sample content. Never treat sample prices or descriptions as current offers.
 8. Contact, ownership, approval, and listing information must be verified with the business before public launch.
 9. Netlify SPA redirects and sitemap/robots files exist. Confirm the production domain, canonical URLs, sitemap routes, and deep-link refresh behavior after deployment.
-10. The package scripts include build and lint, but no test script was found in `package.json`.
+10. The package scripts include build and lint, but no test script was found in `package.json`. The committed npm lockfile is missing four dependencies declared in `package.json`; CI was changed temporarily to `npm install` so checks can run while the lockfile is regenerated. Before production, regenerate and commit the lockfile, then restore `npm ci`.
 
 ### Not yet verified
 
