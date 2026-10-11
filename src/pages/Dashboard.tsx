@@ -199,11 +199,11 @@ const Dashboard = () => {
         return;
       }
       const baseSlug = slugify(workspaceName);
-      if (!baseSlug) throw new Error("Choose a business name with letters or numbers.");
+      const workspaceSlug = baseSlug || ("workspace-" + crypto.randomUUID().slice(0, 8));
 
       const { error: insertError } = await client.from("tenants").insert({
         name: workspaceName.trim(),
-        slug: baseSlug,
+        slug: workspaceSlug,
         business_type: businessType,
         created_by: authData.user.id,
         status: "pending",
