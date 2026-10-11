@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 import { COMPANY } from "@/lib/company";
 import logo from "@/assets/khatir-logo.png";
 
@@ -100,6 +101,7 @@ const Auth = () => {
 
   return (
     <main className="min-h-screen bg-background px-4 py-10 sm:px-6">
+      <SEO title="Sign in | Khatir Workspace" description="Secure sign-in for Khatir business workspace users." path="/login" robots="noindex,nofollow" />
       <div className="mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center">
         <Link to="/" className="mb-8 inline-flex w-fit items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to Khatir
