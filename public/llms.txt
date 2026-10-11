@@ -5,6 +5,9 @@
 ## Main pages
 - [Home](/): Khatir overview and services.
 - [Property search](/work): Browse the property collection. Listings marked “SAMPLE ONLY” are illustrative examples, not verified inventory.
+- [Developments](/developments): Explore approved public developer and construction project profiles.
+- [Events](/events): Explore published launches, open houses and site visits.
+- [Property guides](/guides): Browse published property guides and area information.
 - [Services](/services): Property consultancy, construction and development services.
 - [Blog](/blog): Property, design and development articles.
 - [Contact](/contact): Contact Khatir to confirm current information.
