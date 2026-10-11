@@ -374,6 +374,9 @@ const Dashboard = () => {
                   <CardDescription>Public pages and account settings.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
+                  <Link to="/dashboard/leads" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
+                    <span className="flex items-center gap-3"><Users className="h-4 w-4 text-gold" /> Manage leads & follow-ups</span><ArrowRight className="h-4 w-4" />
+                  </Link>
                   <Link to="/dashboard/properties" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
                     <span className="flex items-center gap-3"><Building2 className="h-4 w-4 text-gold" /> Manage property inventory</span><ArrowRight className="h-4 w-4" />
                   </Link>
