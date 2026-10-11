@@ -106,7 +106,7 @@ const PublicDirectory = () => {
                 const detailPath = sectionKey === "guides" ? "/guides/" + row.slug : "/contact";
                 return (
                   <article key={row.id} className="flex flex-col rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-elegant">
-                    <div className="flex items-center justify-between gap-3"><span className="rounded-full bg-primary/5 px-3 py-1 text-xs font-medium capitalize text-primary">{subtitle || "Khatir"}</span>{sectionKey === "projects" && row.approval_status === "verified" ? <span className="rounded-full border border-emerald-600/30 px-3 py-1 text-xs text-emerald-700">Approval checked</span> : null}</div>
+                    <div className="flex items-center justify-between gap-3"><span className="rounded-full bg-primary/5 px-3 py-1 text-xs font-medium capitalize text-primary">{subtitle || "Khatir"}</span>{sectionKey === "developments" && row.approval_status === "verified" ? <span className="rounded-full border border-emerald-600/30 px-3 py-1 text-xs text-emerald-700">Approval checked</span> : null}</div>
                     <h2 className="mt-5 text-xl font-medium leading-snug text-primary">{row.title}</h2>
                     {place && <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />{place}</p>}
                     {date && <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground"><CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-gold" />{new Date(date).toLocaleString()}</p>}
