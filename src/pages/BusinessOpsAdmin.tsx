@@ -235,6 +235,8 @@ const BusinessOpsAdmin = () => {
         const raw = form[field.key]?.trim() ?? "";
         if (field.key.startsWith("creative_")) {
           creative[field.key.replace("creative_", "")] = raw || null;
+        } else if (field.key === "target_locations_text") {
+          payload.target_locations = raw.split(",").map((location) => location.trim()).filter(Boolean).slice(0, 50);
         } else if (field.type === "number") {
           payload[field.key] = raw ? Number(raw) : null;
         } else if (field.type === "datetime-local") {
