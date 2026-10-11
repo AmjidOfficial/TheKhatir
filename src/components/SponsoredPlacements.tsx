@@ -47,7 +47,14 @@ const SponsoredPlacements = ({ placementTypes, title = "Featured partners", curr
     return () => { cancelled = true; };
   }, [placementTypeKey]);
 
-  if (!placements.length) return null;
+  const locationKey = currentLocation?.trim().toLowerCase();
+  const visiblePlacements = placements.filter((placement) => {
+    const targets = placement.target_locations ?? [];
+    if (!targets.length || !locationKey) return true;
+    return targets.some((target) => locationKey.includes(target.toLowerCase()) || target.toLowerCase().includes(locationKey));
+  });
+
+  if (!visiblePlacements.length) return null;
 
   return (
     <section aria-label={title} className="container mx-auto px-6 py-10 md:py-14">
