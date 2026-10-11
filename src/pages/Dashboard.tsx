@@ -132,7 +132,7 @@ const Dashboard = () => {
           role: profile.platform_role,
         }));
       } else if (membershipList.length) {
-        const ids = membershipList.map((membership: any) => membership.tenant_id);
+        const ids = membershipList.map((membership) => membership.tenant_id);
         const { data: tenantRows, error: tenantsError } = await client
           .from("tenants")
           .select("id, name, slug, business_type, status")
