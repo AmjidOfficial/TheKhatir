@@ -27,7 +27,7 @@ for (const table of tables) {
     "RLS is not explicitly enabled for: " + table,
   );
   requireMatch(
-    new RegExp("create policy \"[^\"]+\" on public\\." + table + "\\b", "i"),
+    new RegExp('create policy "[^"]+" on public\\.' + table + "\\b", "i"),
     "No explicit RLS policy found for: " + table,
   );
 }
@@ -61,17 +61,24 @@ for (const helper of [
 }
 
 requireMatch(
-  /revoke all on public\\.tenants, public\\.properties, public\\.projects, public\\.events,[\\s\\S]{0,160}?from anon/i,
+  /revoke all on public\.tenants, public\.properties, public\.projects, public\.events,[\s\S]{0,160}?from anon/i,
   "Anonymous users must not receive base-table access to tenant data.",
 );
 requireMatch(
-  /grant select on public\\.marketplace_businesses,[\\s\\S]{0,260}?to anon, authenticated/i,
+  /grant select on public\.marketplace_businesses,[\s\S]{0,260}?to anon, authenticated/i,
   "Curated public marketplace views must be explicitly granted.",
 );
 
-for (const match of sql.matchAll(/create or replace function public\\.[\\s\\S]*?security definer[\\s\\S]*?as \\$\\$/gi)) {
-  if (!/set search_path = public/i.test(match[0])) {
-    errors.push("SECURITY DEFINER function lacks a fixed search_path near: " + match[0].slice(0, 100).replace(/\\s+/g, " "));
+const functionBlocks = sql
+  .split(/(?=create or replace function public\.)/i)
+  .filter((block) => /^create or replace function public\./i.test(block));
+
+for (const block of functionBlocks) {
+  if (/security definer/i.test(block) && !/set search_path = public/i.test(block)) {
+    errors.push(
+      "SECURITY DEFINER function lacks a fixed search_path near: " +
+      block.slice(0, 100).replace(/\s+/g, " "),
+    );
   }
 }
 
