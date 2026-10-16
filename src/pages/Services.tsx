@@ -8,8 +8,8 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Services — Consultancy, Construction & Projects | Khatir"
-        description="End-to-end real estate services in Peshawar: property consultancy, turn-key construction and project development by Khatir Real Estate & Builders."
+        title="Services — Consultancy, Construction & Projects | Khater"
+        description="End-to-end real estate services in Peshawar: property consultancy, turn-key construction and project development by Khater Property Consultant & Builders."
         path="/services"
       />
       <Navigation />
@@ -21,7 +21,7 @@ const ServicesPage = () => {
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
             Whether you're investing in a plot, buying your dream home, or building from scratch —
-            Khatir Real Estate &amp; Builders handles every step end-to-end.
+            Khater Property Consultant &amp; Builders handles every step end-to-end.
           </p>
         </div>
       </section>
