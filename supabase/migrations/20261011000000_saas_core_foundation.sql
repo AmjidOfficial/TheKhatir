@@ -1323,10 +1323,10 @@ revoke all on function public.is_platform_admin() from public, anon, authenticat
 revoke all on function public.is_tenant_member(uuid) from public, anon, authenticated;
 revoke all on function public.can_manage_tenant(uuid) from public, anon, authenticated;
 revoke all on function public.can_manage_listings(uuid) from public, anon, authenticated;
-grant execute on function public.is_platform_admin() to anon, authenticated;
-grant execute on function public.is_tenant_member(uuid) to anon, authenticated;
-grant execute on function public.can_manage_tenant(uuid) to anon, authenticated;
-grant execute on function public.can_manage_listings(uuid) to anon, authenticated;
+grant execute on function public.is_platform_admin() to authenticated;
+grant execute on function public.is_tenant_member(uuid) to authenticated;
+grant execute on function public.can_manage_tenant(uuid) to authenticated;
+grant execute on function public.can_manage_listings(uuid) to authenticated;
 grant select, update on public.user_profiles to authenticated;
 grant select, insert, update, delete on public.tenant_memberships to authenticated;
 grant insert, update, delete on public.tenants to authenticated;
