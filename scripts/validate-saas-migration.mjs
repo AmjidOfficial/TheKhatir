@@ -14,7 +14,7 @@ const tables = [
   "ad_campaigns", "content_pages", "audit_logs",
 ];
 
-requireMatch(/^begin;\s*/i, "Migration must start with BEGIN.");
+requireMatch(/^\s*(?:--[^\n]*\n\s*)*begin;/i, "Migration must start with BEGIN after its comments.");
 requireMatch(/commit;\s*$/i, "Migration must end with COMMIT.");
 
 for (const table of tables) {
@@ -48,7 +48,7 @@ for (const [trigger, table] of relationshipTriggers) {
 }
 
 for (const helper of [
-  "is_platform_admin()", "is_tenant_member\\(uuid\\)",
+  "is_platform_admin\\(\\)", "is_tenant_member\\(uuid\\)",
   "can_manage_tenant\\(uuid\\)", "can_manage_listings\\(uuid\\)",
 ]) {
   requireMatch(
