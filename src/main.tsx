@@ -14,3 +14,13 @@ createRoot(document.getElementById("root")!).render(
     </ThemeProvider>
   </StrictMode>
 );
+
+// Register the PWA worker only in production. It caches same-origin app assets;
+// Supabase/API requests are cross-origin and are deliberately left untouched.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch((error: unknown) => {
+      console.error("PWA service worker registration failed:", error);
+    });
+  });
+}

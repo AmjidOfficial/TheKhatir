@@ -18,13 +18,13 @@ const Blog = () => {
       : blogPosts.filter((post) => post.category === activeCategory);
 
   const updatesMessage =
-    "Assalam-o-Alaikum! I would like to receive Khatir property and project updates. Please share available options and how I can subscribe.";
+    "Assalam-o-Alaikum! I would like to receive Khater property and project updates. Please share available options and how I can subscribe.";
 
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Insights & Blog | Khatir Real Estate & Builders"
-        description="Practical guides on buying property, construction, local areas, and real estate decisions from Khatir Real Estate & Builders."
+        title="Insights & Blog | Khater Property Consultant & Builders"
+        description="Practical guides on buying property, construction, local areas, and real estate decisions from Khater Property Consultant & Builders."
         path="/blog"
       />
       <Navigation />
