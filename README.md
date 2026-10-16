@@ -1,4 +1,4 @@
-# Khatir Property & Development Platform
+# Khater Property Consultant & Builders | TheKhatir SaaS
 
 Khatir is being built as a Peshawar-first real estate and property-development SaaS platform. The long-term product brings property search, developer projects, construction workflows, lead management, events, advertising, SEO publishing and business operations into one secure workspace.
 
@@ -80,6 +80,7 @@ Run before opening a pull request:
 ```bash
 npx tsc --noEmit
 npm run lint
+npm run test:saas-migration
 npm run build
 ```
 
