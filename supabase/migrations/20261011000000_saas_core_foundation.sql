@@ -697,6 +697,33 @@ create index if not exists idx_campaigns_tenant_status on public.ad_campaigns(te
 create index if not exists idx_content_public_slug on public.content_pages(publication_status, slug);
 create index if not exists idx_audit_tenant_time on public.audit_logs(tenant_id, created_at desc);
 
+-- Enforce cross-tenant relationships at the database boundary.
+-- These triggers are required for the validation function above to protect writes.
+drop trigger if exists validate_leads_tenant_relationships on public.leads;
+create trigger validate_leads_tenant_relationships
+before insert or update on public.leads
+for each row execute function public.validate_tenant_relationships();
+
+drop trigger if exists validate_tasks_tenant_relationships on public.tasks;
+create trigger validate_tasks_tenant_relationships
+before insert or update on public.tasks
+for each row execute function public.validate_tenant_relationships();
+
+drop trigger if exists validate_lead_activities_tenant_relationships on public.lead_activities;
+create trigger validate_lead_activities_tenant_relationships
+before insert or update on public.lead_activities
+for each row execute function public.validate_tenant_relationships();
+
+drop trigger if exists validate_event_registrations_tenant_relationships on public.event_registrations;
+create trigger validate_event_registrations_tenant_relationships
+before insert or update on public.event_registrations
+for each row execute function public.validate_tenant_relationships();
+
+drop trigger if exists validate_ad_campaigns_tenant_relationships on public.ad_campaigns;
+create trigger validate_ad_campaigns_tenant_relationships
+before insert or update on public.ad_campaigns
+for each row execute function public.validate_tenant_relationships();
+
 create or replace function public.bootstrap_tenant_owner()
 returns trigger
 language plpgsql
