@@ -35,7 +35,7 @@ const SEO = ({ title, description, path, type = "website", image, jsonLd, robots
       <meta name="description" content={description} />
       <meta name="robots" content={robotsContent} />
       <link rel="canonical" href={canonical} />
-      <meta property="og:site_name" content="Khatir Real Estate & Builders" />
+      <meta property="og:site_name" content="Khater Property Consultant & Builders" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
