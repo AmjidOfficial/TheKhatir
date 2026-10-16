@@ -35,20 +35,19 @@ export function brokeredPreviewStorage() {
     new Promise((resolve) => {
       const requestId = newId();
       let done = false;
-      let timer: ReturnType<typeof setTimeout> | undefined;
       const finish = (r: { ok: boolean; value?: string | null } | null) => {
         if (done) return;
         done = true;
-        if (timer !== undefined) clearTimeout(timer);
+        clearTimeout(timer);
         window.removeEventListener('message', onMessage);
         resolve(r);
       };
+      const timer = setTimeout(() => finish(null), TIMEOUT);
       const onMessage = (e: MessageEvent) => {
         if (editorOrigins.indexOf(e.origin) < 0) return;
         const d = e.data;
         if (d && d.type === RESULT && d.requestId === requestId) finish(d);
       };
-      timer = setTimeout(() => finish(null), TIMEOUT);
       window.addEventListener('message', onMessage);
       const msg: Record<string, unknown> = { type, requestId, projectId, key };
       if (value !== undefined) msg['value'] = value;
