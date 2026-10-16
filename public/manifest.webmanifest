@@ -1,0 +1,14 @@
+{
+  "id": "/",
+  "name": "Khater Property Consultant & Builders",
+  "short_name": "Khater Property",
+  "description": "Property consultancy, real estate, construction and development services in Peshawar, Pakistan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8faf8",
+  "theme_color": "#163d32",
+  "categories": ["business", "lifestyle"],
+  "icons": [{"src": "/pwa-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}
