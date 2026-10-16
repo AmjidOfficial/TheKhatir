@@ -8,7 +8,7 @@ const Hero = () => {
       {/* Background image — LCP candidate */}
       <img
         src={heroImage}
-        alt="Khatir Real Estate & Builders — premium properties in Peshawar"
+        alt="Khater Property Consultant & Builders — premium properties in Peshawar"
         width={1920}
         height={1080}
         fetchPriority="high"
@@ -36,7 +36,7 @@ const Hero = () => {
         <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-gold to-transparent reveal-delayed" />
 
         <p className="text-base md:text-xl text-white font-light tracking-wide max-w-2xl mx-auto mb-12 reveal-delayed">
-          Khatir Real Estate &amp; Builders — Peshawar's trusted partner for premium properties,
+          Khater Property Consultant &amp; Builders — Peshawar's trusted partner for premium properties,
           plots, and turn-key construction.
         </p>
 
