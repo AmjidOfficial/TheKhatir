@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="104" fill="#163d32"/>
+  <path d="M92 224 256 94l164 130" fill="none" stroke="#e7d8b1" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M134 220v168h244V220" fill="none" stroke="#e7d8b1" stroke-width="20" stroke-linejoin="round"/>
+  <path d="M204 388V270h104v118" fill="none" stroke="#e7d8b1" stroke-width="18" stroke-linejoin="round"/>
+  <text x="256" y="462" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="middle" fill="#ffffff">KHATER</text>
+</svg>
