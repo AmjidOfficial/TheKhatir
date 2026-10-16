@@ -37,5 +37,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Validate SaaS migration security invariants
+        run: npm run test:saas-migration
+
       - name: Build
         run: npm run build
