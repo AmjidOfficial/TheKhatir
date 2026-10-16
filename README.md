@@ -59,7 +59,7 @@ If the variables are missing, the login and workspace screens show a setup messa
 
 ## Database and security
 
-The proposed schema is in [the SaaS database foundation migration](supabase/migrations/20261011000000_saas_core_foundation.sql). Read [the rollout and security checklist](docs/SAAS_DATABASE_FOUNDATION.md) before applying it.
+The proposed schema is in [the SaaS database foundation migration](supabase/migrations/20261011000000_saas_core_foundation.sql). Read the [safe database migration plan](docs/SAFE_DATABASE_MIGRATION_PLAN.md), [schema review addendum](docs/SCHEMA_STATIC_REVIEW_ADDENDUM.md), and [rollout/security checklist](docs/SAAS_DATABASE_FOUNDATION.md) before applying it.
 
 Important:
 1. Confirm the correct Khatir Supabase project first. Do not apply this migration to the unrelated N-LINK360 project.
