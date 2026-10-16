@@ -1,9 +1,9 @@
 // Central company config — edit values here or via Visual Edits
 export const COMPANY = {
-  name: "Khatir Real Estate & Builders",
-  shortName: "KHATIR",
-  tagline: "Real Estate & Construction Company",
-  services: "Consultancy · Construction · Projects",
+  name: "Khater Property Consultant & Builders",
+  shortName: "KHATER",
+  tagline: "Property Consultant & Builders in Peshawar",
+  services: "Property Consultancy · Construction · Development Projects",
   address: "Office #17, Commercial Area, AWT Housing Scheme, Kohat Road, Peshawar",
   city: "Peshawar, Pakistan",
   founded: "2005",
@@ -17,9 +17,9 @@ export const COMPANY = {
   whatsapp: {
     number: "923018934165", // E.164 without + for wa.me
     defaultMessage:
-      "Assalam-o-Alaikum! I'm interested in Khatir Real Estate & Builders. Please share more details.",
+      "Assalam-o-Alaikum! I'm interested in Khater Property Consultant & Builders. Please share more details.",
   },
-  // Only publish social profiles that the business has confirmed. Empty values are hidden.
+  // Only publish social profiles that the business has confirmed. The Facebook page URL is a platform address, not a display name.
   social: {
     facebook: "https://www.facebook.com/KhaterPropertyConsultantBuilders",
     instagram: "",
