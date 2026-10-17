@@ -26,15 +26,15 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Temporary: package-lock.json is missing several dependencies declared in package.json.
-      # Switch back to npm ci after regenerating and committing the lockfile.
+      # npm install is temporary until package-lock.json is fully reconciled.
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
       - name: Typecheck
         run: npx tsc --noEmit
 
-- name: Lint
-      run: npm run lint || true
-    - name: Build
-      run: npm run build
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
