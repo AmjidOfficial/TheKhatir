@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Archive, Building2, CircleAlert, Edit3, LoaderCircle, Plus, RefreshCw, Search, Send, X } from "lucide-react";
+import { ArrowLeft, Archive, Building2, CircleAlert, Edit3, LoaderCircle, Plus, RefreshCw, Search, Send, Trash2, X } from "lucide-react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,7 @@ type Workspace = { id: string; name: string; role: string; status: string };
 type PropertyRow = {
   id: string;
   tenant_id: string;
+  created_by: string | null;
   reference_code: string;
   title: string;
   slug: string;
@@ -69,6 +70,7 @@ const PropertiesAdmin = () => {
   const navigate = useNavigate();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [workspaceId, setWorkspaceId] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
   const [properties, setProperties] = useState<PropertyRow[]>([]);
   const [form, setForm] = useState<PropertyForm>(emptyForm);
   const [editingId, setEditingId] = useState("");
@@ -85,7 +87,10 @@ const PropertiesAdmin = () => {
     "listing_editor", "marketer", "developer_manager", "builder_manager",
     "platform_admin", "super_admin",
   ].includes(activeWorkspace.role));
-  const canArchive = Boolean(activeWorkspace && ["owner", "tenant_admin", "branch_manager", "platform_admin", "super_admin"].includes(activeWorkspace.role));
+  const managerRoles = ["owner", "tenant_admin", "branch_manager", "platform_admin", "super_admin"];
+  const canArchive = Boolean(activeWorkspace && managerRoles.includes(activeWorkspace.role));
+  const canEditProperty = (property: PropertyRow) => Boolean(canEdit && (managerRoles.includes(activeWorkspace?.role ?? "") || property.created_by === currentUserId));
+  const canDeleteProperty = (property: PropertyRow) => Boolean(canArchive || (property.created_by && property.created_by === currentUserId));
 
   const load = useCallback(async (showSpinner = true) => {
     if (!isSupabaseConfigured) {
@@ -143,7 +148,7 @@ const PropertiesAdmin = () => {
       }
       const { data: rows, error: propertyError } = await client
         .from("properties")
-        .select("id,tenant_id,reference_code,title,slug,description,listing_type,intent,price,currency,area_value,area_unit,city,locality,verification_status,publication_status,updated_at")
+        .select("id,tenant_id,created_by,reference_code,title,slug,description,listing_type,intent,price,currency,area_value,area_unit,city,locality,verification_status,publication_status,updated_at")
         .eq("tenant_id", chosen.id)
         .order("updated_at", { ascending: false });
       if (propertyError) throw new Error("Property inventory could not be loaded. Check your role and database policies.");
@@ -282,6 +287,29 @@ const PropertiesAdmin = () => {
     }
   };
 
+  const deleteProperty = async (property: PropertyRow) => {
+    setError("");
+    setNotice("");
+    if (!activeWorkspace || !canDeleteProperty(property)) {
+      setError("You can delete only your own listings. Workspace managers can manage all listings.");
+      return;
+    }
+    const confirmed = window.confirm(`Permanently delete "${property.title}"? This cannot be undone.`);
+    if (!confirmed) return;
+    try {
+      const client = getSupabaseClient() as unknown as SupabaseClient;
+      const { error: deleteError } = await client.from("properties")
+        .delete()
+        .eq("id", property.id)
+        .eq("tenant_id", activeWorkspace.id);
+      if (deleteError) throw deleteError;
+      setNotice("Listing deleted. The audit record is retained.");
+      await load(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not delete the listing.");
+    }
+  };
+
   if (loading) {
     return <main className="flex min-h-screen items-center justify-center gap-3 bg-background text-muted-foreground"><SEO title="Property inventory | Khatir Workspace" description="Private property operations." path="/dashboard/properties" robots="noindex,nofollow" /><LoaderCircle className="h-5 w-5 animate-spin" /> Loading property inventory…</main>;
   }
@@ -380,9 +408,9 @@ const PropertiesAdmin = () => {
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" onClick={() => openEditForm(property)} disabled={!canEdit}><Edit3 className="h-4 w-4" /> Edit</Button>
-                        {property.publication_status === "draft" && <Button variant="secondary" size="sm" onClick={() => void updateStatus(property, "pending_review")} disabled={!canEdit}><Send className="h-4 w-4" /> Submit for review</Button>}
-                        {property.publication_status !== "archived" && <Button variant="ghost" size="sm" onClick={() => void updateStatus(property, "archived")} disabled={!canArchive}><Archive className="h-4 w-4" /> Archive</Button>}
+                        <Button variant="outline" size="sm" onClick={() => openEditForm(property)} disabled={!canEditProperty(property)}><Edit3 className="h-4 w-4" /> Edit</Button>
+                        {property.publication_status === "draft" && <Button variant="secondary" size="sm" onClick={() => void updateStatus(property, "pending_review")} disabled={!canEditProperty(property)}><Send className="h-4 w-4" /> Submit for review</Button>}
+                        {property.publication_status !== "archived" && canArchive && <Button variant="ghost" size="sm" onClick={() => void updateStatus(property, "archived")}><Archive className="h-4 w-4" /> Archive</Button>}\n                        {canDeleteProperty(property) && <Button variant="ghost" size="sm" onClick={() => void deleteProperty(property)} className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /> Delete</Button>}
                       </div>
                     </div>
                   </article>
