@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Building2, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logo from "@/assets/khater-brand.svg";
@@ -21,26 +21,19 @@ const Navigation = () => {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 glass border-b border-gold/15" aria-label="Main navigation">
-      <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-3 px-3 py-2 sm:px-5 lg:px-8">
-        <Link to="/" onClick={closeMenu} className="flex min-w-0 items-center" aria-label={COMPANY.name}>
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-background/95 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/85" aria-label="Main navigation">
+      <div className="mx-auto flex min-h-16 w-full max-w-screen-2xl items-center justify-between gap-3 px-3 py-2 sm:min-h-[4.5rem] sm:px-5 lg:px-8">
+        <Link to="/" onClick={closeMenu} className="flex min-w-0 shrink items-center" aria-label={COMPANY.name}>
           <img
             src={logo}
             alt={COMPANY.name}
             width="760"
             height="180"
-            className="hidden h-11 w-auto max-w-[min(72vw,340px)] object-contain sm:block sm:h-14 md:h-16"
+            className="block h-10 w-auto max-w-[min(68vw,280px)] object-contain sm:h-12 sm:max-w-[min(40vw,320px)] lg:h-14"
           />
-          <span className="flex min-w-0 items-center gap-2 sm:hidden">
-            <Building2 aria-hidden="true" className="h-8 w-8 shrink-0 text-primary" />
-            <span className="flex min-w-0 flex-col leading-tight">
-              <span className="whitespace-nowrap text-sm font-bold tracking-tight text-foreground">Khatir Property</span>
-              <span className="whitespace-nowrap text-[10px] font-semibold tracking-wide text-gold">Consultant &amp; Builders</span>
-            </span>
-          </span>
         </Link>
 
-        <div className="hidden items-center gap-5 lg:flex xl:gap-7">
+        <div className="hidden shrink-0 items-center gap-4 xl:flex 2xl:gap-6">
           {navLinks.map((link) => (
             <Link key={link.href} to={link.href} className="whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-primary">
               {link.label}
@@ -52,9 +45,9 @@ const Navigation = () => {
           <ThemeToggle />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 lg:hidden">
+        <div className="flex shrink-0 items-center gap-2 xl:hidden">
           <Link to="/login" className="hidden min-h-10 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground sm:inline-flex">
-            Login
+            Sign in
           </Link>
           <Button
             type="button"
@@ -72,8 +65,8 @@ const Navigation = () => {
       </div>
 
       {isMenuOpen && (
-        <div id="mobile-navigation-menu" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-border bg-background/95 shadow-lg backdrop-blur-xl lg:hidden">
-          <div className="mx-auto grid w-full max-w-screen-2xl gap-1 px-4 py-4 sm:px-6">
+        <div id="mobile-navigation-menu" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background shadow-lg xl:hidden">
+          <div className="mx-auto grid w-full max-w-screen-2xl gap-1 px-4 py-3 sm:px-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -84,13 +77,14 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/login"
-              onClick={closeMenu}
-              className="mt-2 inline-flex min-h-12 items-center justify-center rounded-lg bg-primary px-4 text-base font-semibold text-primary-foreground"
-            >
-              Login / Create account
-            </Link>
+            <div className="grid grid-cols-2 gap-2 pt-2">
+              <Link to="/login" onClick={closeMenu} className="inline-flex min-h-12 items-center justify-center rounded-lg border border-border px-3 text-sm font-semibold text-foreground">
+                Sign in
+              </Link>
+              <Link to="/signup" onClick={closeMenu} className="inline-flex min-h-12 items-center justify-center rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground">
+                Create account
+              </Link>
+            </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <SocialLinks iconClassName="h-5 w-5" />
               <ThemeToggle />
