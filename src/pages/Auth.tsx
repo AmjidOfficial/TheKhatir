@@ -33,7 +33,7 @@ const Auth = () => {
     setMessage("");
 
     if (!isSupabaseConfigured) {
-      setError("Workspace sign-in is not connected yet. The site owner must configure the approved Khatir Supabase project before accounts can be created.");
+      setError("Workspace sign-in is not connected yet. The site owner must configure the approved Khater Property Consultant & Builders Supabase project before accounts can be created.");
       return;
     }
 
@@ -77,7 +77,7 @@ const Auth = () => {
     setError("");
     setMessage("");
     if (!isSupabaseConfigured) {
-      setError("Password recovery becomes available after the Khatir authentication project is configured.");
+      setError("Password recovery becomes available after the Khater Property Consultant & Builders authentication project is configured.");
       return;
     }
     if (!email.trim()) {
@@ -101,10 +101,10 @@ const Auth = () => {
 
   return (
     <main className="min-h-screen bg-background px-4 py-10 sm:px-6">
-      <SEO title="Sign in | Khatir Workspace" description="Secure sign-in for Khatir business workspace users." path="/login" robots="noindex,nofollow" />
+      <SEO title="Sign in | Khater Property Consultant & Builders Workspace" description="Secure sign-in for Khater Property Consultant & Builders workspace users." path="/login" robots="noindex,nofollow" />
       <div className="mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center">
         <Link to="/" className="mb-8 inline-flex w-fit items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary">
-          <ArrowLeft className="h-4 w-4" /> Back to Khatir
+          <ArrowLeft className="h-4 w-4" /> Back to Khater Property Consultant & Builders
         </Link>
 
         <div className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-xl lg:grid-cols-[1fr_0.9fr]">
@@ -114,7 +114,7 @@ const Auth = () => {
               <div className="inline-flex rounded-2xl bg-white p-3">
                 <img src={logo} alt={COMPANY.name} className="h-16 w-auto object-contain" />
               </div>
-              <p className="mt-10 text-xs uppercase tracking-[0.25em] text-gold">KHATIR WORKSPACE</p>
+              <p className="mt-10 text-xs uppercase tracking-[0.25em] text-gold">KHATER WORKSPACE</p>
               <h1 className="mt-4 max-w-lg text-4xl font-light leading-tight">
                 One workspace for your property business.
               </h1>
@@ -147,7 +147,7 @@ const Auth = () => {
               <CardContent className="px-0 pb-0">
                 {!isSupabaseConfigured && (
                   <div role="status" className="mb-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-                    Authentication is not connected in this deployment yet. No fake login is provided. Configure the approved Khatir Supabase project to enable real accounts.
+                    Authentication is not connected in this deployment yet. No fake login is provided. Configure the approved Khater Property Consultant & Builders Supabase project to enable real accounts.
                   </div>
                 )}
                 {error && <div role="alert" className="mb-5 rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">{error}</div>}
@@ -187,7 +187,7 @@ const Auth = () => {
                 </form>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
-                  {mode === "signin" ? "New to Khatir Workspace?" : "Already have an account?"}{" "}
+                  {mode === "signin" ? "New to Khater Property Consultant & Builders Workspace?" : "Already have an account?"}{" "}
                   <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setMessage(""); }} className="font-medium text-primary underline-offset-4 hover:underline">
                     {mode === "signin" ? "Create account" : "Sign in"}
                   </button>
