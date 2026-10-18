@@ -74,7 +74,7 @@ const PropertyDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={property.title + " | Khatir Real Estate, Peshawar"} description={"Property details for " + property.title + " in " + property.location + ". Contact Khatir to confirm current price, availability and documents."} path={"/property/" + property.id} image={property.image || undefined} robots={property.isSample ? "noindex,nofollow" : undefined} />
+      <SEO title={property.title + " | Khater Property Consultant, Peshawar"} description={"Property details for " + property.title + " in " + property.location + ". Contact Khater to confirm current price, availability and documents."} path={"/property/" + property.id} image={property.image || undefined} robots={property.isSample ? "noindex,nofollow" : undefined} />
       <Navigation />
       <main className="container mx-auto px-6 pb-24 pt-32 md:pt-36">
         <div className="mx-auto max-w-7xl">
