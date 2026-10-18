@@ -11,7 +11,7 @@ Status: static source review only. The core migration has NOT been executed agai
 - Added a repository migration file named 20261016102522_restrict_rls_auto_enable_rpc_execution.sql to match the version already recorded by the remote Supabase project. The file is conditional so a clean local environment without that project-managed function can still apply the migration sequence.
 - Updated the repository's Supabase project reference to the owner-confirmed project vpjslrrfgmvkurohplzq.
 - Added a PWA manifest, scalable SVG icon, cautious offline app-shell/static-asset service worker, and production-only registration. API/backend traffic and non-GET requests are excluded from the cache.
-- Standardized the central company name to Khater Property Consultant & Builders.
+- Standardized the central company name to Khatir Property Consultant & Builders.
 
 ## Static checks completed during source review
 
