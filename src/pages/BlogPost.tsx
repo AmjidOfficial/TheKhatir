@@ -36,7 +36,7 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title={`${post.title} | Khater Insights`}
+        title={`${post.title} | Khatir Insights`}
         description={post.excerpt.slice(0, 158)}
         path={`/blog/${post.id}`}
         type="article"
