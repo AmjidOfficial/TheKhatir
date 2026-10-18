@@ -1,14 +1,14 @@
 // Central company config — edit values here or via Visual Edits
 export const COMPANY = {
   name: "Khater Property Consultant & Builders",
-  shortName: "KHATER",
-  tagline: "Khater Property Consultant & Builders in Peshawar",
+  shortName: "KHATER PROPERTY",
+  tagline: "Khater Property Consultant & Builders",
   services: "Property Consultancy · Construction · Development Projects",
   address: "Office #17, Commercial Area, AWT Housing Scheme, Kohat Road, Peshawar",
   city: "Peshawar, Pakistan",
-  founded: "2005",
+  
   contacts: [
-    { name: "Ikhtiar Khatir", phone: "+92 301 8934165", phoneRaw: "+923018934165" },
+    { name: "Ikhtiar Khater", phone: "+92 301 8934165", phoneRaw: "+923018934165" },
     { name: "Badam Sher", phone: "+92 300 5898080", phoneRaw: "+923005898080" },
   ],
   email: "info@khatirrealestate.com",
