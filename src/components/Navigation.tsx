@@ -1,75 +1,91 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import logo from "@/assets/khatir-logo.png";
+import logo from "@/assets/khater-brand.svg";
 import { COMPANY } from "@/lib/company";
 import SocialLinks from "@/components/SocialLinks";
 
 const navLinks = [
-  { href: "/work", label: "PROPERTIES" },
-  { href: "/services", label: "SERVICES" },
-  { href: "/about", label: "ABOUT" },
-  { href: "/blog", label: "BLOG" },
-  { href: "/contact", label: "CONTACT" },
-  { href: "/login", label: "WORKSPACE" },
+  { href: "/work", label: "Properties" },
+  { href: "/services", label: "Services" },
+  { href: "/developments", label: "Developments" },
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Guides & News" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gold/15">
-      <div className="container mx-auto px-6 py-2 flex items-center justify-between">
-        <a href="/" className="flex items-center group" aria-label={COMPANY.name}>
+    <nav className="fixed inset-x-0 top-0 z-50 glass border-b border-gold/15" aria-label="Main navigation">
+      <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-3 px-3 py-2 sm:px-5 lg:px-8">
+        <Link to="/" onClick={closeMenu} className="flex min-w-0 items-center" aria-label={COMPANY.name}>
           <img
             src={logo}
             alt={COMPANY.name}
-            className="h-14 md:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105 dark:bg-background/0 dark:brightness-125 dark:contrast-125"
+            width="760"
+            height="180"
+            className="h-11 w-auto max-w-[min(72vw,340px)] object-contain sm:h-14 md:h-16"
           />
-        </a>
+        </Link>
 
-        <div className="hidden md:flex items-center space-x-10">
-          {navLinks.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="relative text-minimal text-muted-foreground hover:text-primary transition-colors duration-300 after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full"
-            >
-              {l.label}
-            </a>
+        <div className="hidden items-center gap-5 lg:flex xl:gap-7">
+          {navLinks.map((link) => (
+            <Link key={link.href} to={link.href} className="whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-primary">
+              {link.label}
+            </Link>
           ))}
-        </div>
-
-        <div className="hidden md:flex items-center space-x-4">
-          <SocialLinks className="hidden lg:flex" iconClassName="h-4 w-4" />
+          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
+            Login / Sign up
+          </Link>
           <ThemeToggle />
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? "✕" : "☰"}
-        </Button>
+        <div className="flex shrink-0 items-center gap-2 lg:hidden">
+          <Link to="/login" className="hidden min-h-10 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground sm:inline-flex">
+            Login
+          </Link>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-11 w-11 shrink-0"
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation-menu"
+          >
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-background border-b border-border">
-          <div className="container mx-auto px-6 py-6 space-y-4">
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="block text-minimal text-muted-foreground hover:text-primary transition-colors duration-300"
+        <div id="mobile-navigation-menu" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-border bg-background/95 shadow-lg backdrop-blur-xl lg:hidden">
+          <div className="mx-auto grid w-full max-w-screen-2xl gap-1 px-4 py-4 sm:px-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                onClick={closeMenu}
+                className="flex min-h-12 items-center rounded-lg px-3 text-base font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
-                {l.label}
-              </a>
+                {link.label}
+              </Link>
             ))}
-            <div className="pt-4 border-t border-border flex items-center justify-between">
-              <SocialLinks iconClassName="h-4 w-4" />
+            <Link
+              to="/login"
+              onClick={closeMenu}
+              className="mt-2 inline-flex min-h-12 items-center justify-center rounded-lg bg-primary px-4 text-base font-semibold text-primary-foreground"
+            >
+              Login / Create account
+            </Link>
+            <div className="flex items-center justify-between border-t border-border pt-4">
+              <SocialLinks iconClassName="h-5 w-5" />
               <ThemeToggle />
             </div>
           </div>
