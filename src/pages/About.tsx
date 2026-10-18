@@ -8,8 +8,8 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="About Khater Property Consultant & Builders | Peshawar"
-        description="Learn about Khater Property Consultant & Builders, providing property consultancy, construction and development services in Peshawar."
+        title="About Khatir Property Consultant & Builders | Peshawar"
+        description="Learn about Khatir Property Consultant & Builders, providing property consultancy, construction and development services in Peshawar."
         path="/about"
       />
       <Navigation />
