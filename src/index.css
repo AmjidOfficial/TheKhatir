@@ -214,3 +214,22 @@
     100% { transform: translateY(30%); opacity: 0; }
   }
 }
+
+
+/* Mobile-first layout safeguards for narrow Android and iOS screens. */
+@layer base {
+  html { width: 100%; min-width: 320px; overflow-x: clip; scroll-padding-top: 5.5rem; }
+  body, #root { width: 100%; min-height: 100%; overflow-x: clip; }
+  img, video, iframe { max-width: 100%; }
+  button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+  button, a { touch-action: manipulation; }
+  :focus-visible { outline-offset: 3px; }
+  @media (max-width: 640px) {
+    h1 { overflow-wrap: anywhere; }
+    section { scroll-margin-top: 5.5rem; }
+    .container { max-width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
