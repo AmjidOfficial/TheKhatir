@@ -1,5 +1,5 @@
 import { MapPin, Phone, Mail } from "lucide-react";
-import logo from "@/assets/khatir-logo.png";
+import logo from "@/assets/khater-brand.svg";
 import { COMPANY, waLink } from "@/lib/company";
 import SocialLinks from "@/components/SocialLinks";
 
