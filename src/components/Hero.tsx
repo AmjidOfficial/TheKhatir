@@ -4,7 +4,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden py-24 sm:py-28">
       {/* Background image — LCP candidate */}
       <img
         src={heroImage}
@@ -24,7 +24,7 @@ const Hero = () => {
         {/* Top eyebrow chip */}
         <div className="inline-flex items-center gap-3 px-4 py-1.5 mb-8 rounded-full glass-dark reveal">
           <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-          <span className="text-minimal text-gold/90">Established 2005 · Peshawar</span>
+          <span className="text-minimal text-gold/90">Peshawar · Property & Construction</span>
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-light text-white text-architectural mb-8 reveal">
