@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase/client";
 import SEO from "@/components/SEO";
 import { COMPANY } from "@/lib/company";
-import logo from "@/assets/khatir-brand.svg";
+import logo from "@/assets/khater-brand.svg";
 
 type Mode = "signin" | "signup";
 
