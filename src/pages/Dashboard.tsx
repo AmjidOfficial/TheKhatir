@@ -12,7 +12,7 @@ import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { COMPANY } from "@/lib/company";
 import SEO from "@/components/SEO";
-import logo from "@/assets/khatir-logo.png";
+import logo from "@/assets/khater-brand.svg";
 
 type Workspace = {
   id: string;
