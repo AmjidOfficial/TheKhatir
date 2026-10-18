@@ -239,7 +239,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-4"><SEO title="Workspace dashboard | Khatir" description="Private Khatir business workspace." path="/dashboard" robots="noindex,nofollow" />
+      <main className="flex min-h-screen items-center justify-center bg-background px-4"><SEO title="Workspace dashboard | Khatir" description="Private Khatir Property Consultant & Builders workspace." path="/dashboard" robots="noindex,nofollow" />
         <div className="flex items-center gap-3 text-muted-foreground"><LoaderCircle className="h-5 w-5 animate-spin" /> Loading your secure workspace…</div>
       </main>
     );
@@ -247,7 +247,7 @@ const Dashboard = () => {
 
   return (
     <main className="min-h-screen bg-muted/30">
-      <SEO title="Workspace dashboard | Khatir" description="Private Khatir business workspace." path="/dashboard" robots="noindex,nofollow" />
+      <SEO title="Workspace dashboard | Khatir" description="Private Khatir Property Consultant & Builders workspace." path="/dashboard" robots="noindex,nofollow" />
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3">
@@ -404,7 +404,7 @@ const Dashboard = () => {
                     <span className="flex items-center gap-3"><FolderKanban className="h-4 w-4 text-gold" /> Construction & services</span><ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link to="/contact" className="flex items-center justify-between rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted">
-                    <span className="flex items-center gap-3"><UserRound className="h-4 w-4 text-gold" /> Contact Khatir</span><ArrowRight className="h-4 w-4" />
+                    <span className="flex items-center gap-3"><UserRound className="h-4 w-4 text-gold" /> Contact Khatir Property</span><ArrowRight className="h-4 w-4" />
                   </Link>
                 </CardContent>
               </Card>
