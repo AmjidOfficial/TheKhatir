@@ -13,8 +13,8 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Khater Property Consultant & Builders — Peshawar"
-        description="Property consultancy, development and construction services in Peshawar. Browse property information and contact Khater Property Consultant & Builders to confirm availability, approvals and documents."
+        title="Khatir Property Consultant & Builders — Peshawar"
+        description="Property consultancy, development and construction services in Peshawar. Browse property information and contact Khatir Property Consultant & Builders to confirm availability, approvals and documents."
         path="/"
       />
       <Navigation />
