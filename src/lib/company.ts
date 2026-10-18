@@ -2,7 +2,7 @@
 export const COMPANY = {
   name: "Khater Property Consultant & Builders",
   shortName: "KHATER",
-  tagline: "Property Consultant & Builders in Peshawar",
+  tagline: "Khater Property Consultant & Builders in Peshawar",
   services: "Property Consultancy · Construction · Development Projects",
   address: "Office #17, Commercial Area, AWT Housing Scheme, Kohat Road, Peshawar",
   city: "Peshawar, Pakistan",
