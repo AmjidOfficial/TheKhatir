@@ -7,7 +7,7 @@ const About = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-20 items-center">
             <div>
-              <h2 className="text-minimal text-gold mb-4">ABOUT KHATIR</h2>
+              <h2 className="text-minimal text-gold mb-4">ABOUT KHATER</h2>
               <h3 className="text-4xl md:text-6xl font-light text-architectural text-primary mb-12">
                 Trusted by hundreds of <span className="text-gold">families.</span>
               </h3>
