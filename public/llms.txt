@@ -1,9 +1,9 @@
-# Khatir Real Estate & Builders
+# Khater Property Consultant & Builders
 
-> Khatir is a Peshawar-focused property, development and construction business website. The Khatir SaaS workspace is in development.
+> Khater Property Consultant & Builders is a Peshawar-focused property, development and construction business website. The Khatir SaaS workspace is in development.
 
 ## Main pages
-- [Home](/): Khatir overview and services.
+- [Home](/): Khater Property Consultant & Builders overview and services.
 - [Property search](/work): Browse the property collection. Listings marked “SAMPLE ONLY” are illustrative examples, not verified inventory.
 - [Developments](/developments): Explore approved public developer and construction project profiles.
 - [Events](/events): Explore published launches, open houses and site visits.
@@ -11,7 +11,7 @@
 - [Services](/services): Property consultancy, construction and development services.
 - [Blog](/blog): Property, design and development articles.
 - [Contact](/contact): Contact Khatir to confirm current information.
-- [Business workspace sign-in](/login): Account access for the Khatir workspace.
+- [Business workspace sign-in](/login): Account access for the Khater Property Consultant & Builders workspace.
 
 ## Important information
 - Do not treat sample property titles, prices or availability as live offers.
