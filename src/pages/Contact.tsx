@@ -8,8 +8,8 @@ const ContactPage = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Contact Khatir Real Estate & Builders | Peshawar"
-        description="Get in touch with Khatir Real Estate & Builders in Peshawar — AWT Housing Scheme, Kohat Road. Call or WhatsApp our team."
+        title="Contact Khater Property Consultant & Builders | Peshawar"
+        description="Get in touch with Khater Property Consultant & Builders in Peshawar — AWT Housing Scheme, Kohat Road. Call or WhatsApp our team."
         path="/contact"
       />
       <Navigation />
