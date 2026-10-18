@@ -1,6 +1,6 @@
 # Mobile and cross-device QA checklist
 
-Use this checklist before merging or promoting the Khater Property Consultant & Builders website.
+Use this checklist before merging or promoting the Khatir Property Consultant & Builders website.
 
 ## Viewports to verify
 
