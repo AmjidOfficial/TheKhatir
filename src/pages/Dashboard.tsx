@@ -12,7 +12,7 @@ import { getSupabaseClient, isSupabaseConfigured } from "@/integrations/supabase
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { COMPANY } from "@/lib/company";
 import SEO from "@/components/SEO";
-import logo from "@/assets/khater-brand.svg";
+import logo from "@/assets/khatir-brand.svg";
 
 type Workspace = {
   id: string;
@@ -85,7 +85,7 @@ const Dashboard = () => {
 
   const loadDashboard = useCallback(async (showSpinner = true) => {
     if (!isSupabaseConfigured) {
-      setBackendError("The approved Khater Property Consultant & Builders Supabase project is not connected to this deployment yet. No sample metrics or fake accounts are shown.");
+      setBackendError("The approved Khatir Property Consultant & Builders Supabase project is not connected to this deployment yet. No sample metrics or fake accounts are shown.");
       setLoading(false);
       return;
     }
@@ -108,8 +108,8 @@ const Dashboard = () => {
         .eq("id", user.id)
         .maybeSingle();
 
-      if (profileError) throw new Error("The Khater Property Consultant & Builders workspace database is not ready. Apply and verify the approved database migration first.");
-      setDisplayName(profile?.display_name || user.user_metadata?.full_name || user.email || "Khater workspace user");
+      if (profileError) throw new Error("The Khatir Property Consultant & Builders workspace database is not ready. Apply and verify the approved database migration first.");
+      setDisplayName(profile?.display_name || user.user_metadata?.full_name || user.email || "Khatir workspace user");
       setPlatformRole(profile?.platform_role || "user");
 
       const { data: membershipRows, error: membershipError } = await client
