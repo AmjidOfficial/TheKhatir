@@ -1,6 +1,6 @@
-# Khater Property Consultant & Builders | TheKhatir SaaS
+# Khatir Property Consultant & Builders | TheKhatir SaaS
 
-Khater Property Consultant & Builders is being built as a Peshawar-first real estate and property-development SaaS platform. The long-term product brings property search, developer projects, construction workflows, lead management, events, advertising, SEO publishing and business operations into one secure workspace.
+Khatir Property Consultant & Builders is being built as a Peshawar-first real estate and property-development SaaS platform. The long-term product brings property search, developer projects, construction workflows, lead management, events, advertising, SEO publishing and business operations into one secure workspace.
 
 **Production status: in development.** The public website is a foundation. SaaS authentication and workspace screens are being implemented, and the database migration is still under review. Do not treat this repository as production-ready until the release gates below pass.
 
