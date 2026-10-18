@@ -37,7 +37,7 @@ const Work = () => {
       } catch {
         if (!cancelled) {
           setListingProperties([]);
-          setLoadError("Live property listings could not be loaded. Please try again later or contact Khater.");
+          setLoadError("Live property listings could not be loaded. Please try again later or contact Khatir.");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -73,8 +73,8 @@ const Work = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Properties for Sale & Rent in Peshawar | Khater"
-        description="Explore houses, plots, apartments and commercial property opportunities in Peshawar. Contact Khater to confirm current availability, price and documents."
+        title="Properties for Sale & Rent in Peshawar | Khatir"
+        description="Explore houses, plots, apartments and commercial property opportunities in Peshawar. Contact Khatir to confirm current availability, price and documents."
         path="/work"
         robots={usingSamples || (isSupabaseConfigured && listingProperties.length === 0) ? "noindex,follow" : undefined}
       />
