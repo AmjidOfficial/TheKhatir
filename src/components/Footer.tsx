@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="relative overflow-hidden border-t border-gold/20 bg-gradient-luxe text-luxe-foreground">
       <div className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "24px 24px" }} />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
-      <div className="container relative mx-auto px-4 py-10 sm:px-6 sm:py-16">
+      <div className="container relative mx-auto px-4 pb-28 pt-10 sm:px-6 sm:py-16">
         <div className="grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-4">
           <div className="min-w-0 md:col-span-2">
             <a href="/" className="mb-5 inline-flex max-w-full items-center rounded-xl bg-white p-3 shadow-gold" aria-label={COMPANY.name}>
