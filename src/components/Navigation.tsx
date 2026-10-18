@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Building2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logo from "@/assets/khater-brand.svg";
@@ -29,8 +29,15 @@ const Navigation = () => {
             alt={COMPANY.name}
             width="760"
             height="180"
-            className="h-11 w-auto max-w-[min(72vw,340px)] object-contain sm:h-14 md:h-16"
+            className="hidden h-11 w-auto max-w-[min(72vw,340px)] object-contain sm:block sm:h-14 md:h-16"
           />
+          <span className="flex min-w-0 items-center gap-2 sm:hidden">
+            <Building2 aria-hidden="true" className="h-8 w-8 shrink-0 text-primary" />
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="whitespace-nowrap text-sm font-bold tracking-tight text-foreground">Khatir Property</span>
+              <span className="whitespace-nowrap text-[10px] font-semibold tracking-wide text-gold">Consultant &amp; Builders</span>
+            </span>
+          </span>
         </Link>
 
         <div className="hidden items-center gap-5 lg:flex xl:gap-7">
