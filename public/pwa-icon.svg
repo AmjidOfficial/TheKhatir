@@ -1,7 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Khatir Property Consultant &amp; Builders</title>
   <rect width="512" height="512" rx="112" fill="#163d32"/>
-  <path d="M92 244 256 112l164 132v150a18 18 0 0 1-18 18H110a18 18 0 0 1-18-18Z" fill="#f8faf8"/>
-  <path d="M70 244 256 94l186 150-23 29L256 133 93 273Z" fill="#c8a96b"/>
-  <path d="M214 412V278h84v134" fill="#163d32"/>
-  <path d="M154 236h54v42h-54zm150 0h54v42h-54z" fill="#163d32"/>
+  <path d="M108 244 256 120l148 124v154a18 18 0 0 1-18 18H126a18 18 0 0 1-18-18Z" fill="#f8faf8"/>
+  <path d="M82 245 256 98l174 147-23 28L256 137 105 273Z" fill="#c8a96b"/>
+  <path d="M214 416V278h84v138" fill="#163d32"/>
+  <path d="M154 238h54v42h-54zm150 0h54v42h-54z" fill="#163d32"/>
+  <text x="256" y="474" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#f8faf8" letter-spacing="3">KHATIR</text>
 </svg>
