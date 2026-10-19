@@ -233,3 +233,49 @@
     *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
 }
+
+
+/* Global mobile layout and safe-area hardening. Keep headings and controls clear of fixed UI. */
+@layer base {
+  html {
+    scroll-padding-top: calc(5rem + env(safe-area-inset-top));
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+
+  :where(input, textarea, select, button) {
+    max-width: 100%;
+  }
+
+  :where(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 380px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    h1, h2, h3, p, a, button {
+      overflow-wrap: anywhere;
+    }
+
+    section[id] {
+      scroll-margin-top: calc(5rem + env(safe-area-inset-top));
+    }
+  }
+}
