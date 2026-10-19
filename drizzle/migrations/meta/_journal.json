@@ -8,6 +8,13 @@
       "when": 1792391249817,
       "tag": "0000_identity_tenants",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792391320215,
+      "tag": "0001_inventory_crm",
+      "breakpoints": true
     }
   ]
 }
