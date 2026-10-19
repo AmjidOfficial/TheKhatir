@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import logo from "@/assets/khater-brand.svg";
+import logoMark from "@/assets/khatir-logo-mark.png";
 import { COMPANY } from "@/lib/company";
 import SocialLinks from "@/components/SocialLinks";
 
@@ -22,30 +22,35 @@ const Navigation = () => {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-background/95 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/85" aria-label="Main navigation">
-      <div className="mx-auto flex min-h-16 w-full max-w-screen-2xl items-center justify-between gap-3 px-3 py-2 sm:min-h-[4.5rem] sm:px-5 lg:px-8">
-        <Link to="/" onClick={closeMenu} className="flex min-w-0 shrink items-center" aria-label={COMPANY.name}>
+      <div className="mx-auto flex min-h-16 w-full max-w-screen-2xl items-center justify-between gap-2 px-3 py-2 sm:min-h-[4.5rem] sm:gap-4 sm:px-5 lg:px-8">
+        <Link to="/" onClick={closeMenu} className="flex min-w-0 shrink items-center gap-2 sm:gap-3" aria-label={COMPANY.name}>
           <img
-            src={logo}
-            alt={COMPANY.name}
-            width="760"
-            height="180"
-            className="block h-10 w-auto max-w-[min(68vw,280px)] object-contain sm:h-12 sm:max-w-[min(40vw,320px)] lg:h-14"
+            src={logoMark}
+            alt=""
+            aria-hidden="true"
+            width="96"
+            height="96"
+            className="block h-9 w-9 shrink-0 rounded-lg object-contain sm:h-11 sm:w-11 lg:h-12 lg:w-12"
           />
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="whitespace-nowrap text-[13px] font-bold tracking-tight text-primary sm:text-base lg:text-lg">Khatir Property</span>
+            <span className="whitespace-nowrap text-[10px] font-semibold tracking-[0.015em] text-muted-foreground sm:text-xs lg:text-sm">Consultant &amp; Builders</span>
+          </span>
         </Link>
 
-        <div className="hidden shrink-0 items-center gap-4 xl:flex 2xl:gap-6">
+        <div className="hidden shrink-0 items-center gap-3 xl:flex 2xl:gap-5">
           {navLinks.map((link) => (
             <Link key={link.href} to={link.href} className="whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-primary">
               {link.label}
             </Link>
           ))}
-          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
+          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 2xl:px-5">
             Login / Sign up
           </Link>
           <ThemeToggle />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 xl:hidden">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2 xl:hidden">
           <Link to="/login" className="hidden min-h-10 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground sm:inline-flex">
             Sign in
           </Link>
