@@ -21,9 +21,12 @@ const Navigation = () => {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-background/95 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/85" aria-label="Main navigation">
+    <nav
+      className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-background/95 pt-[env(safe-area-inset-top)] shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/90"
+      aria-label="Main navigation"
+    >
       <div className="mx-auto flex min-h-16 w-full max-w-screen-2xl items-center justify-between gap-2 px-3 py-2 sm:min-h-[4.5rem] sm:gap-4 sm:px-5 lg:px-8">
-        <Link to="/" onClick={closeMenu} className="flex min-w-0 shrink items-center gap-2 sm:gap-3" aria-label={COMPANY.name}>
+        <Link to="/" onClick={closeMenu} className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none sm:gap-3" aria-label={COMPANY.name}>
           <img
             src={logoMark}
             alt=""
@@ -33,8 +36,8 @@ const Navigation = () => {
             className="block h-9 w-9 shrink-0 rounded-lg object-contain sm:h-11 sm:w-11 lg:h-12 lg:w-12"
           />
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="whitespace-nowrap text-[13px] font-bold tracking-tight text-primary sm:text-base lg:text-lg">Khatir Property</span>
-            <span className="whitespace-nowrap text-[10px] font-semibold tracking-[0.015em] text-muted-foreground sm:text-xs lg:text-sm">Consultant &amp; Builders</span>
+            <span className="whitespace-nowrap text-[clamp(11px,3.35vw,13px)] font-bold tracking-tight text-primary sm:text-base lg:text-lg">Khatir Property</span>
+            <span className="whitespace-nowrap text-[clamp(8px,2.55vw,10px)] font-semibold tracking-[0.015em] text-muted-foreground sm:text-xs lg:text-sm">Consultant &amp; Builders</span>
           </span>
         </Link>
 
@@ -44,15 +47,15 @@ const Navigation = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 2xl:px-5">
+          <Link to="/login" className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 2xl:px-5">
             Login / Sign up
           </Link>
           <ThemeToggle />
         </div>
 
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2 xl:hidden">
-          <Link to="/login" className="hidden min-h-10 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground sm:inline-flex">
-            Sign in
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 xl:hidden">
+          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-2.5 text-[11px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 sm:px-4 sm:text-sm">
+            Login
           </Link>
           <Button
             type="button"
