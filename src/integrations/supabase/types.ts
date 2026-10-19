@@ -14,16 +14,167 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      branches: {
+        Row: {
+          id: string
+          name: string
+          tenant_id: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          tenant_id: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branches_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memberships: {
+        Row: {
+          branch_id: string | null
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["workspace_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["workspace_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["workspace_role"]
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_branch_id_tenant_id_fkey"
+            columns: ["branch_id", "tenant_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id", "tenant_id"]
+          },
+          {
+            foreignKeyName: "memberships_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          preferences: Json
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id: string
+          preferences?: Json
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          preferences?: Json
+        }
+        Relationships: []
+      }
+      tenants: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_manage: { Args: { t: string }; Returns: boolean }
+      create_workspace: { Args: { business_name: string }; Returns: string }
+      is_platform_admin: { Args: never; Returns: boolean }
+      record_access: {
+        Args: { b: string; crm?: boolean; owner_id: string; t: string }
+        Returns: boolean
+      }
+      tenant_role: {
+        Args: { t: string }
+        Returns: Database["public"]["Enums"]["workspace_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      workspace_role:
+        | "owner"
+        | "admin"
+        | "branch_manager"
+        | "sales_manager"
+        | "agent"
+        | "marketer"
+        | "builder_manager"
+        | "finance"
+        | "property_owner"
+        | "investor"
+        | "customer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +301,20 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      workspace_role: [
+        "owner",
+        "admin",
+        "branch_manager",
+        "sales_manager",
+        "agent",
+        "marketer",
+        "builder_manager",
+        "finance",
+        "property_owner",
+        "investor",
+        "customer",
+      ],
+    },
   },
 } as const
