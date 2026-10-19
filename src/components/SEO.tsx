@@ -27,7 +27,7 @@ const SEO = ({ title, description, path, type = "website", image, jsonLd, robots
     }
   };
   const url = safeHttpUrl(normalizedPath) ?? SITE_URL;
-  const absoluteImage = safeHttpUrl(image);
+  const absoluteImage = safeHttpUrl(image) ?? safeHttpUrl("/favicon.png");
   const canonical = safeHttpUrl(canonicalUrl) ?? url;
   const robotsContent = robots ? robots.replaceAll(",", ", ") : "index, follow, max-image-preview:large";
   const cleanDescription = description.trim() || DEFAULT_DESCRIPTION;
@@ -44,11 +44,12 @@ const SEO = ({ title, description, path, type = "website", image, jsonLd, robots
       <meta property="og:url" content={url} />
       <meta property="og:type" content={type} />
       <meta property="og:locale" content="en_PK" />
-      <meta name="twitter:card" content={absoluteImage ? "summary_large_image" : "summary"} />
+      <meta property="og:image" content={absoluteImage} />
+      <meta property="og:image:alt" content={COMPANY.name} />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={cleanDescription} />
-      {absoluteImage && <meta property="og:image" content={absoluteImage} />}
-      {absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
+      <meta name="twitter:image" content={absoluteImage} />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
     </Helmet>
   );
