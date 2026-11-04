@@ -1,78 +1,120 @@
-import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { MapPin, Phone, MessageCircle, Send } from "lucide-react";
 import { COMPANY, waLink } from "@/lib/company";
 import SocialLinks from "@/components/SocialLinks";
 
 const Contact = () => {
-  return (
-    <section id="contact" className="py-32 bg-background">
-      <div className="container mx-auto px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-20">
-            <div>
-              <h2 className="text-minimal text-gold mb-4">GET IN TOUCH</h2>
-              <h3 className="text-4xl md:text-6xl font-light text-architectural text-primary mb-12">
-                Let's find your <span className="text-gold">perfect property.</span>
-              </h3>
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [interest, setInterest] = useState("Buying a property");
+  const [area, setArea] = useState("");
+  const [message, setMessage] = useState("");
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <MapPin className="h-5 w-5 text-gold mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-minimal text-muted-foreground mb-1">OFFICE</h4>
-                    <address className="not-italic text-lg text-primary">
-                      {COMPANY.address}
-                    </address>
+  const submitEnquiry = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const enquiry = [
+      "New website enquiry",
+      `Name: ${name.trim()}`,
+      `Phone: ${phone.trim()}`,
+      `Interested in: ${interest}`,
+      area.trim() ? `Preferred area: ${area.trim()}` : "",
+      message.trim() ? `Details: ${message.trim()}` : "",
+      "Source: Khatir Property Consultant & Builders website",
+    ].filter(Boolean).join("\n");
+    window.open(waLink(enquiry), "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <section id="contact" className="bg-background py-16 sm:py-24 lg:py-32">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+          <div className="min-w-0">
+            <h2 className="text-minimal mb-4 text-gold">GET IN TOUCH</h2>
+            <h3 className="mb-8 text-3xl font-light text-architectural text-primary sm:mb-10 sm:text-4xl lg:mb-12 lg:text-6xl">
+              Let's find your <span className="text-gold">perfect property.</span>
+            </h3>
+
+            <div className="space-y-6">
+              <div className="flex min-w-0 items-start gap-4">
+                <MapPin className="mt-1 h-5 w-5 shrink-0 text-gold" />
+                <div className="min-w-0">
+                  <h4 className="text-minimal mb-1 text-muted-foreground">OFFICE</h4>
+                  <address className="break-words text-base not-italic text-primary sm:text-lg">{COMPANY.address}</address>
+                </div>
+              </div>
+
+              {COMPANY.contacts.map((contact) => (
+                <div key={contact.phone} className="flex items-start gap-4">
+                  <Phone className="mt-1 h-5 w-5 shrink-0 text-gold" />
+                  <div className="min-w-0">
+                    <h4 className="text-minimal mb-1 text-muted-foreground">{contact.name.toUpperCase()}</h4>
+                    <a href={`tel:${contact.phoneRaw}`} className="break-words text-base text-primary transition-colors hover:text-gold sm:text-lg">
+                      {contact.phone}
+                    </a>
                   </div>
                 </div>
-
-                {COMPANY.contacts.map((c) => (
-                  <div key={c.phone} className="flex items-start gap-4">
-                    <Phone className="h-5 w-5 text-gold mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-minimal text-muted-foreground mb-1">{c.name.toUpperCase()}</h4>
-                      <a
-                        href={`tel:${c.phoneRaw}`}
-                        className="text-lg text-primary hover:text-gold transition-colors"
-                      >
-                        {c.phone}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-
-              </div>
+              ))}
             </div>
 
-            <div className="space-y-8">
-              <div className="rounded-lg bg-gradient-emerald p-10 text-luxe-foreground shadow-architectural">
-                <MessageCircle className="h-10 w-10 text-gold mb-4" />
-                <h4 className="text-2xl font-light mb-3">Talk to us instantly</h4>
-                <p className="text-luxe-foreground/80 mb-6 leading-relaxed">
-                  Have a question about a property, plot, or construction project?
-                  Send us a message on WhatsApp — we usually reply within minutes.
-                </p>
-                <a
-                  href={waLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-md font-medium hover:bg-[#1ebe57] transition-colors"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  Chat on WhatsApp
-                </a>
+            <div className="mt-8 border-t border-border pt-6 sm:mt-10">
+              <p className="leading-relaxed text-muted-foreground">
+                <span className="font-medium text-gold">Consultancy · Construction · Development</span>.
+                Local property guidance from the Khatir team in Peshawar.
+              </p>
+              <div className="mt-5"><SocialLinks /></div>
+            </div>
+          </div>
+
+          <div className="min-w-0 space-y-6">
+            <div className="rounded-2xl bg-gradient-emerald p-5 text-luxe-foreground shadow-architectural sm:p-8">
+              <div className="mb-4 flex items-center gap-3">
+                <MessageCircle className="h-8 w-8 shrink-0 text-gold" />
+                <div>
+                  <h4 className="text-xl font-medium sm:text-2xl">Quick property enquiry</h4>
+                  <p className="mt-1 text-sm text-luxe-foreground/75">Tell us what you need. We’ll connect on WhatsApp.</p>
+                </div>
               </div>
 
-              <div>
-                <h4 className="text-minimal text-gold mb-4">FOLLOW US</h4>
-                <SocialLinks />
-              </div>
+              <form onSubmit={submitEnquiry} className="grid gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="grid gap-1.5 text-sm font-medium" htmlFor="enquiry-name">
+                    Your name
+                    <input id="enquiry-name" name="name" autoComplete="name" required maxLength={100} value={name} onChange={(event) => setName(event.target.value)} className="h-11 min-w-0 rounded-lg border border-white/20 bg-white/10 px-3 text-base text-white outline-none placeholder:text-white/55 focus-visible:ring-2 focus-visible:ring-gold" placeholder="Full name" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium" htmlFor="enquiry-phone">
+                    Phone / WhatsApp
+                    <input id="enquiry-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" required maxLength={30} value={phone} onChange={(event) => setPhone(event.target.value)} className="h-11 min-w-0 rounded-lg border border-white/20 bg-white/10 px-3 text-base text-white outline-none placeholder:text-white/55 focus-visible:ring-2 focus-visible:ring-gold" placeholder="+92..." />
+                  </label>
+                </div>
 
-              <div className="pt-6 border-t border-border">
-                <p className="text-muted-foreground leading-relaxed">
-                  <span className="text-gold font-medium">Consultancy · Construction · Projects</span> — your
-                  trusted Peshawar property partner since {COMPANY.founded}.
-                </p>
-              </div>
+                <label className="grid gap-1.5 text-sm font-medium" htmlFor="enquiry-interest">
+                  What are you looking for?
+                  <select id="enquiry-interest" name="interest" value={interest} onChange={(event) => setInterest(event.target.value)} className="h-11 min-w-0 rounded-lg border border-white/20 bg-[#163d32] px-3 text-base text-white outline-none focus-visible:ring-2 focus-visible:ring-gold">
+                    <option>Buying a property</option>
+                    <option>Selling a property</option>
+                    <option>Renting a property</option>
+                    <option>Plot or land</option>
+                    <option>Construction or renovation</option>
+                    <option>Investment or development project</option>
+                    <option>General consultation</option>
+                  </select>
+                </label>
+
+                <label className="grid gap-1.5 text-sm font-medium" htmlFor="enquiry-area">
+                  Preferred area (optional)
+                  <input id="enquiry-area" name="area" maxLength={120} value={area} onChange={(event) => setArea(event.target.value)} className="h-11 min-w-0 rounded-lg border border-white/20 bg-white/10 px-3 text-base text-white outline-none placeholder:text-white/55 focus-visible:ring-2 focus-visible:ring-gold" placeholder="e.g. Hayatabad, DHA, AWT..." />
+                </label>
+
+                <label className="grid gap-1.5 text-sm font-medium" htmlFor="enquiry-message">
+                  More details (optional)
+                  <textarea id="enquiry-message" name="message" rows={3} maxLength={1200} value={message} onChange={(event) => setMessage(event.target.value)} className="min-w-0 resize-y rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-base text-white outline-none placeholder:text-white/55 focus-visible:ring-2 focus-visible:ring-gold" placeholder="Share your budget, size or other needs..." />
+                </label>
+
+                <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-gold px-5 py-3 font-semibold text-gold-foreground transition-transform hover:-translate-y-0.5 sm:w-auto">
+                  <Send className="h-4 w-4" /> Send enquiry on WhatsApp
+                </button>
+                <p className="text-xs leading-5 text-luxe-foreground/70">Your message opens in WhatsApp. It is not submitted to a website database yet.</p>
+              </form>
             </div>
           </div>
         </div>
