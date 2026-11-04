@@ -27,6 +27,7 @@ Use the exact public brand name **Khatir Property Consultant & Builders** in the
 - AEO: answer common buyer questions clearly, add visible FAQs where useful, and use matching FAQ/article structured data only when the same answers are visible on the page.
 - Keep private workspace, account, lead and customer pages noindex.
 - Generate sitemap entries only for canonical public pages; keep robots.txt from blocking resources needed to render pages.
+- The public quick-enquiry form currently prepares a WhatsApp message. It does not yet write a lead into the CRM database; connect it to a validated, rate-limited Supabase Edge Function before calling web-to-CRM capture complete.
 - Track consented lead source, campaign, landing page and property reference. Add spam protection, validation and clear privacy consent before public forms are enabled.
 
 ## SaaS release gates
