@@ -24,15 +24,15 @@ const Navigation = () => {
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-gold/20 bg-background/95 pt-[env(safe-area-inset-top)] shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/90" aria-label="Main navigation">
       <div className="mx-auto flex min-h-[4.25rem] w-full max-w-screen-2xl items-center justify-between gap-2 px-3 py-2 sm:min-h-[4.75rem] sm:gap-4 sm:px-5 lg:px-8">
         <Link to="/" onClick={closeMenu} className="flex min-w-0 flex-1 items-center sm:flex-none" aria-label={COMPANY.name}>
-          <img src={brandLogo} alt={COMPANY.name} width="900" height="210" fetchPriority="high" className="block h-auto w-[clamp(148px,48vw,205px)] max-w-full object-contain sm:w-[230px] lg:w-[250px]" />
+          <img src={brandLogo} alt={COMPANY.name} width="800" height="180" fetchPriority="high" className="block h-auto w-[clamp(180px,58vw,220px)] max-w-full object-contain sm:w-[230px] lg:w-[250px]" />
         </Link>
         <div className="hidden shrink-0 items-center gap-3 xl:flex 2xl:gap-5">
           {navLinks.map((link) => <Link key={link.href} to={link.href} className="whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-primary">{link.label}</Link>)}
           <Link to="/login" className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 2xl:px-5">Login / Sign up</Link>
           <ThemeToggle />
         </div>
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 xl:hidden">
-          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90 sm:px-4 sm:text-sm">Login</Link>
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2 xl:hidden">
+          <Link to="/login" className="inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-2.5 text-[11px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 sm:px-4 sm:text-sm">Login</Link>
           <Button type="button" variant="ghost" size="icon" className="h-11 w-11 shrink-0" onClick={() => setIsMenuOpen((open) => !open)} aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={isMenuOpen} aria-controls="mobile-navigation-menu">
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
