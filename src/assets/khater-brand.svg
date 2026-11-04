@@ -1,12 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 210" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 180" role="img" aria-labelledby="title desc">
   <title id="title">Khatir Property Consultant &amp; Builders</title>
-  <desc id="desc">Khatir monogram and full company name in emerald green and gold.</desc>
-  <rect x="8" y="8" width="194" height="194" rx="32" fill="#163d32"/>
-  <path d="M42 94 105 42l63 52v70H42Z" fill="#f8faf8"/>
-  <path d="m29 95 76-64 76 64-10 12-66-55-66 55Z" fill="#c8a96b"/>
-  <path d="M88 164v-54h34v54" fill="#163d32"/>
-  <path d="M58 97h22v20H58zm72 0h22v20h-22z" fill="#163d32"/>
-  <text x="230" y="91" fill="#163d32" font-family="Arial, Helvetica, sans-serif" font-size="47" font-weight="700" letter-spacing="1">KHATIR PROPERTY</text>
-  <text x="232" y="139" fill="#a27c35" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="600" letter-spacing="0.7">CONSULTANT &amp; BUILDERS</text>
-  <path d="M232 162H860" stroke="#c8a96b" stroke-width="2"/>
+  <desc id="desc">Khatir monogram with the full company name in emerald green and gold.</desc>
+  <rect x="4" y="4" width="164" height="164" rx="26" fill="#163d32"/>
+  <path d="M35 83 86 39l51 44v60H35Z" fill="#f8faf8"/>
+  <path d="m24 84 62-54 62 54-9 11-53-46-53 46Z" fill="#c8a96b"/>
+  <path d="M72 143V98h28v45" fill="#163d32"/>
+  <path d="M48 85h18v18H48zm58 0h18v18h-18z" fill="#163d32"/>
+  <text x="194" y="76" fill="#163d32" font-family="Arial, Helvetica, sans-serif" font-size="57" font-weight="700" letter-spacing="0.4">KHATIR PROPERTY</text>
+  <text x="196" y="132" fill="#a27c35" font-family="Arial, Helvetica, sans-serif" font-size="43" font-weight="600" letter-spacing="0.2">CONSULTANT &amp; BUILDERS</text>
 </svg>
